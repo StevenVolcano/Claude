@@ -2,6 +2,10 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { format, getWeek, getYear, getDay } from "date-fns";
 
+export function baseUrl(): string {
+  return process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3000";
+}
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
