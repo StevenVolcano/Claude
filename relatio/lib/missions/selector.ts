@@ -66,6 +66,9 @@ export async function selectMissionForToday() {
     eligible = await prisma.mission.findMany({ take: 10 });
   }
 
+  if (eligible.length === 0) {
+    throw new Error("No missions in database — run prisma db seed first");
+  }
   const selected = eligible[deterministicIndex(today, eligible.length)];
 
   const daily = await prisma.dailyMission.create({

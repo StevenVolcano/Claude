@@ -3,14 +3,16 @@ import { prisma } from "@/lib/prisma";
 
 export async function GET() {
   const profile = await prisma.onboardingProfile.findUnique({ where: { id: 1 } });
-  let activeCourseSlug: string | null = null;
+  const activeProgramCourseSlugs = new Set<string>();
 
   if (profile) {
     const program = await prisma.program.findUnique({
       where: { slug: profile.programId },
       include: { courses: { include: { course: true }, orderBy: { orderIndex: "asc" } } },
     });
-    activeCourseSlug = program?.courses[0]?.course.slug ?? null;
+    for (const pc of program?.courses ?? []) {
+      activeProgramCourseSlugs.add(pc.course.slug);
+    }
   }
 
   const courses = await prisma.course.findMany({
@@ -36,7 +38,7 @@ export async function GET() {
         lessonCount: total,
         completedCount: completed,
         progressPct: total > 0 ? Math.round((completed / total) * 100) : 0,
-        isInActiveProgram: c.slug === activeCourseSlug,
+        isInActiveProgram: activeProgramCourseSlugs.has(c.slug),
       };
     }),
   });

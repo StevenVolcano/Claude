@@ -5,7 +5,7 @@ const SECRET = new TextEncoder().encode(
   process.env.SESSION_SECRET || "relatio-dev-secret-change-in-prod"
 );
 
-const PUBLIC_PATHS = ["/pin", "/api/auth/verify-pin"];
+const PUBLIC_PATHS = ["/pin", "/api/auth/verify-pin", "/api/auth/logout"];
 
 export async function proxy(request: NextRequest) {
   if (process.env.REQUIRE_PIN !== "true") return NextResponse.next();

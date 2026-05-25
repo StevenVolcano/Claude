@@ -16,6 +16,8 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
+  const entry = await prisma.journalEntry.findUnique({ where: { id: parseInt(id) } });
+  if (!entry) return NextResponse.json({ error: "Not found" }, { status: 404 });
   await prisma.journalEntry.delete({ where: { id: parseInt(id) } });
   return NextResponse.json({ ok: true });
 }

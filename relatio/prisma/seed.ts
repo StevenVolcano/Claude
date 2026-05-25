@@ -433,6 +433,7 @@ async function main() {
   // 5. Missions
   const missions = readMissions();
   for (const m of missions) {
+    const missionCourseId = m.courseId != null ? courseIdBySlug[m.courseId] ?? null : null;
     await prisma.mission.upsert({
       where: { slug: m.slug },
       update: {
@@ -441,7 +442,7 @@ async function main() {
         area: m.area,
         phase: m.phase,
         tags: m.tags,
-        courseId: null,
+        courseId: missionCourseId,
       },
       create: {
         slug: m.slug,
@@ -450,7 +451,7 @@ async function main() {
         area: m.area,
         phase: m.phase,
         tags: m.tags,
-        courseId: null,
+        courseId: missionCourseId,
       },
     });
   }

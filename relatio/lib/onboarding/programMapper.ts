@@ -21,11 +21,8 @@ export function mapAnswersToProgram(answers: Answer[]): string {
     return "foundation-healing";
   }
 
-  // Rule 2: Single readiness
-  if (
-    status === "single_ready" &&
-    (goal === "daily_wellness" || goal === "improve_communication")
-  ) {
+  // Rule 2: Single readiness (covers single_ready + any goal including deepen_intimacy)
+  if (status === "single_ready") {
     return "foundation-readiness";
   }
 
