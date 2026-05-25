@@ -1,0 +1,13 @@
+Intimacy is not maintained by grand gestures. It is maintained by small, consistent acts of turning toward each other — and the most reliable way to make those acts consistent is to build them into daily rituals. Research on relationship stability consistently finds that couples who maintain small daily connection rituals — greetings, farewells, brief check-ins, moments of physical touch — report higher intimacy than those who rely on occasional intensives like vacations or date nights.
+
+John Gottman's work identified several specific rituals with measurable effects. The six-second kiss at departure — a real kiss, not a peck, long enough to actually be present for it — communicates "you matter to me as I leave" and takes about six seconds. The twenty-minute daily stress-reducing conversation (stress-offloading, not problem-solving) gives each partner a turn to be heard about the day's difficulties while the other simply listens. The departure and reunion rituals — a real goodbye and a real hello — mark the threshold between apart and together and rebuild connection across the gap of the day.
+
+What these rituals share is predictability. They create a reliable architecture of connection that both partners can count on. This predictability is a form of safety. In a world that is largely uncontrollable, knowing that your partner will kiss you properly before leaving, or that there will be twenty minutes tonight to be heard, reduces ambient anxiety and deepens the sense that you are in this together.
+
+The temptation is to copy rituals rather than design them. A ritual works because it is genuinely yours — because both partners find it meaningful, not because it appeared in a book or was done by someone else's relationship. The most sustainable rituals are those that reflect your actual values and preferences as a couple: when you are both most available, what forms of connection feel most natural to each of you, and what rhythms fit your actual life rather than an ideal one.
+
+Rituals require protection from schedule disruption. They are easy to skip once — and once skipped, slightly easier to skip again. The discipline is not in the ritual itself but in treating it as non-negotiable, the way sleep and eating are non-negotiable. The relationship is a living system that requires regular feeding.
+
+## Exercise: Design One Connection Ritual
+
+Together or alone, design one new connection ritual for your relationship. Write it down with three specifications: what it is (the specific action), when it happens (the specific time or trigger), and who initiates (or how you alternate). Keep it achievable daily or near-daily. Start this week.
