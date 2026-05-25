@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model OnboardingProfile {
+  id          Int      @id @default(1)
+  completedAt DateTime
+  answers     String
+  programId   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Program {
+  id          Int             @id @default(autoincrement())
+  slug        String          @unique
+  title       String
+  description String
+  phase       String
+  courses     ProgramCourse[]
+}
+
+model Course {
+  id             Int             @id @default(autoincrement())
+  slug           String          @unique
+  title          String
+  description    String
+  area           String
+  coverEmoji     String
+  orderIndex     Int
+  lessons        Lesson[]
+  programCourses ProgramCourse[]
+  missions       Mission[]
+}
+
+model ProgramCourse {
+  id         Int     @id @default(autoincrement())
+  program    Program @relation(fields: [programId], references: [id])
+  programId  Int
+  course     Course  @relation(fields: [courseId], references: [id])
+  courseId   Int
+  orderIndex Int
+
+  @@unique([programId, courseId])
+}
+
+model Lesson {
+  id           Int             @id @default(autoincrement())
+  slug         String          @unique
+  courseId     Int
+  course       Course          @relation(fields: [courseId], references: [id])
+  title        String
+  bodyMarkdown String
+  coachSlug    String
+  orderIndex   Int
+  durationMin  Int
+  progress     LessonProgress?
+}
+
+model LessonProgress {
+  id             Int      @id @default(autoincrement())
+  lessonId       Int      @unique
+  lesson         Lesson   @relation(fields: [lessonId], references: [id])
+  completedAt    DateTime
+  coachNarration String?
+}
+
+model JournalEntry {
+  id         Int      @id @default(autoincrement())
+  loggedAt   DateTime @default(now())
+  mood       String
+  influence  String
+  freeText   String?
+  dayOfWeek  Int
+  weekNumber Int
+  yearNumber Int
+}
+
+model Mission {
+  id       Int            @id @default(autoincrement())
+  slug     String         @unique
+  title    String
+  body     String
+  courseId Int?
+  course   Course?        @relation(fields: [courseId], references: [id])
+  phase    String
+  area     String
+  tags     String
+  daily    DailyMission[]
+}
+
+model DailyMission {
+  id          Int       @id @default(autoincrement())
+  date        String    @unique
+  missionId   Int
+  mission     Mission   @relation(fields: [missionId], references: [id])
+  completedAt DateTime?
+}
