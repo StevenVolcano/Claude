@@ -20,26 +20,26 @@ Toolchain notes: Kotlin 2.0.21 + the Compose compiler plugin come from the root
 `build.gradle.kts` plugins block; AGP 8.7.3 is versioned *in this module's*
 `build.gradle.kts` on purpose (Google-Maven-only artifact; see the comment there).
 
-## What is wired vs. what Phase 3 must wire
+## Engine wiring (Phase 3, done)
 
 All screens, view models, storage, the foreground service, and the map bind to a
 single facade: **`di/GameSessionFactory.kt`** (`GameSession` interface). That file
-is the *only* place allowed to import `io.terminus.core.engine` and
-`io.terminus.core.ai`. It currently returns `PlaceholderGameSession` — a 1 Hz
-clock/phase ticker so the whole UI is navigable end-to-end without game logic.
+(plus `di/ActiveSessionHolder.kt`) is the *only* place allowed to import
+`io.terminus.core.engine` and `io.terminus.core.ai`. The factory builds the real
+thing:
 
-Phase 3 replaces the factory body (see its `TODO(Phase 3)` KDoc):
-
-- construct `engine.GameRunner` from `GameConfig` + `CityFile` + the player list
-  (`GameSessionFactory.buildPlayers`), with the `ai` seeker/hider brains;
-- adapt the runner's `StateFlow<GameState>` / `Flow<GameEvent>` / command channel
-  to `GameSession` (`send`, `close`);
-- per-round `RoundRecord`s: `GameViewModel.endMatchAndRecord` currently writes a
-  best-effort `MatchRecord` with `rounds = emptyList()` — replace with the
-  runner-produced records;
-- sim-mode autosave **restore**: `AppStorage.loadAutosave()` exists and saving runs
-  every 30 s, but resuming a saved `GameState` into a fresh runner is Phase 3
-  (Home's *Resume* currently resumes only a live in-process session).
+- `engine.GameRunner` over the `CityFile`, with `RealTimeSource` (GPS, 1:1) or a
+  pausable `ScaledTimeSource` (sim) and the player roster from
+  `GameSessionFactory.buildPlayers` (engine ids `ai-1`…`ai-n`, app display names);
+- one `engine.RoundAwareAiBrain` per AI opponent (`engine.aiBrainsFor`), which
+  rebuilds the W7 hider/seeker brain per round as roles rotate;
+- an "auto" RNG seed is stamped with the epoch millis at session creation so the
+  whole match is reproducible from the recorded config;
+- `GameViewModel.endMatchAndRecord` persists `GameSession.buildMatchRecord` — the
+  runner-produced per-round `RoundRecord`s plus §7 totals/tiebreaks;
+- sim-mode autosave saves `GameSession.replayLog()` (the command log) every 30 s;
+  Home's *Resume* rebuilds a dead session by command-log replay
+  (`core`'s `engine.Replay.rebuildRunner`); GPS mode is not resumable.
 
 ## OpenStreetMap tile policy
 
@@ -62,7 +62,7 @@ Do not ship heavy traffic against the public servers; switch the tile source in
 to `filesDir/cities/` on first run by `AppStorage.copyBundledCitiesIfNeeded()`.
 Do not edit the `.city.json.gz` files by hand — regenerate via the core generator.
 
-## Manual test script (placeholder session)
+## Manual test script
 
 1. **Home** → *Cities*: both demo cities listed with station/route counts.
 2. *Import GTFS…*: pick any GTFS zip → boundary draw step → report screen →
@@ -83,5 +83,6 @@ Do not edit the `.city.json.gz` files by hand — regenerate via the core genera
 7. GPS mode (on device): grant location permission; the persistent notification
    shows phase + clock and survives backgrounding.
 
-Question/card flows beyond this (answers, compensation draws, captures, scores)
-need the real `GameRunner` and are exercised after Phase 3.
+Question/card flows (answers, compensation draws, captures, scores) run against
+the real `GameRunner`; the deterministic AI-vs-AI path is covered by
+`core/src/test/kotlin/io/terminus/core/integration/` (smoke + replay tests).

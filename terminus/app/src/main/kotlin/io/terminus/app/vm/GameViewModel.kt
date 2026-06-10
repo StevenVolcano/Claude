@@ -9,9 +9,7 @@ import io.terminus.app.di.GameSession
 import io.terminus.core.cityfile.CityCodec
 import io.terminus.core.cityfile.CityFile
 import io.terminus.core.game.GameCommand
-import io.terminus.core.game.PlayMode
 import io.terminus.core.game.PlayerId
-import io.terminus.core.persistence.MatchRecord
 import io.terminus.core.transit.TransitNetwork
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -41,14 +39,13 @@ class GameViewModel(app: Application) : AndroidViewModel(app) {
     val humanPlayerId: PlayerId = ActiveSessionHolder.humanPlayerId
 
     init {
-        // Sim-mode autosave every 30 s real time (ARCHITECTURE.md §5).
+        // Sim-mode autosave every 30 s real time (ARCHITECTURE.md §5): the session's
+        // replay log; GPS sessions return null and are never autosaved.
         viewModelScope.launch(Dispatchers.IO) {
             while (isActive) {
                 delay(30_000L)
-                val state = session?.state?.value ?: continue
-                if (state.config.playMode == PlayMode.SIM) {
-                    storage.saveAutosave(state)
-                }
+                val log = session?.replayLog() ?: continue
+                storage.saveAutosave(log)
             }
         }
     }
@@ -58,21 +55,14 @@ class GameViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     /**
-     * Records the match (best-effort from the final state — Phase 3 replaces this
-     * with the GameRunner-produced per-round records), clears the autosave, and
-     * closes the session.
+     * Records the match from the runner-produced per-round `RoundRecord`s (§7
+     * totals and tiebroken winner included), clears the autosave, and closes the
+     * session.
      */
     suspend fun endMatchAndRecord() {
-        val state = session?.state?.value
-        if (state != null) {
-            val record = MatchRecord(
-                createdEpochSec = System.currentTimeMillis() / 1000,
-                config = state.config,
-                players = state.players,
-                rounds = emptyList(), // TODO(Phase 3): per-round RoundRecords from GameRunner
-                totalScores = state.matchScores,
-                winnerId = state.matchScores.maxByOrNull { it.value }?.key,
-            )
+        val active = session
+        if (active != null) {
+            val record = active.buildMatchRecord(System.currentTimeMillis() / 1000)
             withContext(Dispatchers.IO) {
                 storage.saveMatch(record)
                 storage.clearAutosave()

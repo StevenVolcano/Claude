@@ -103,5 +103,10 @@ object TerminusJson {
     val json: Json = Json {
         ignoreUnknownKeys = true
         encodeDefaults = true
+        // The default discriminator "type" collides with the `type: CardType`
+        // property of GameEvent.CardPlayed / GameCommand.PlayCard (and the curse
+        // events); "kind" is used by no polymorphic subtype (CardType.kind lives on
+        // an enum, which serializes as a plain name).
+        classDiscriminator = "kind"
     }
 }

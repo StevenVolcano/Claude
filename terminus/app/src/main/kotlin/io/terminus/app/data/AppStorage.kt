@@ -3,9 +3,9 @@ package io.terminus.app.data
 import android.content.Context
 import io.terminus.core.cityfile.CityCodec
 import io.terminus.core.cityfile.CityFile
-import io.terminus.core.game.GameState
 import io.terminus.core.persistence.MatchRecord
 import io.terminus.core.persistence.OptionsPreset
+import io.terminus.core.persistence.ReplayLog
 import io.terminus.core.persistence.TerminusJson
 import kotlinx.serialization.builtins.ListSerializer
 import java.io.File
@@ -19,7 +19,8 @@ import java.nio.file.StandardCopyOption
  * - `cities/<cityId>.city.json.gz` — imported + copied-on-first-run bundled cities;
  * - `presets.json` — `List<OptionsPreset>`;
  * - `history/match-<epochSec>.json` — `MatchRecord` per finished match;
- * - `autosave.json` — sim-mode in-progress `GameState` snapshot.
+ * - `autosave.json` — sim-mode in-progress `ReplayLog` (command-log replay rebuilds
+ *   the engine runtime that `GameState` deliberately does not serialize).
  *
  * Every write is atomic (temp file + rename) and every schema is owned by
  * `core.persistence` / `core.cityfile`, serialized with the shared [TerminusJson].
@@ -123,17 +124,17 @@ class AppStorage(context: Context) {
 
     // ------------------------------------------------------------------ autosave
 
-    /** The sim-mode autosave snapshot, or null when absent/corrupt. */
-    fun loadAutosave(): GameState? {
+    /** The sim-mode autosave replay log, or null when absent/corrupt. */
+    fun loadAutosave(): ReplayLog? {
         if (!autosaveFile.exists()) return null
         return runCatching {
-            TerminusJson.json.decodeFromString(GameState.serializer(), autosaveFile.readText(Charsets.UTF_8))
+            TerminusJson.json.decodeFromString(ReplayLog.serializer(), autosaveFile.readText(Charsets.UTF_8))
         }.getOrNull()
     }
 
-    /** Atomically writes the sim-mode autosave snapshot (every 30 s real time). */
-    fun saveAutosave(state: GameState) {
-        writeTextAtomic(autosaveFile, TerminusJson.json.encodeToString(GameState.serializer(), state))
+    /** Atomically writes the sim-mode autosave replay log (every 30 s real time). */
+    fun saveAutosave(log: ReplayLog) {
+        writeTextAtomic(autosaveFile, TerminusJson.json.encodeToString(ReplayLog.serializer(), log))
     }
 
     /** Removes the autosave (round finished or abandoned). */

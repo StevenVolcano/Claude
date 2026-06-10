@@ -12,6 +12,7 @@ import io.terminus.core.game.PlayerId
 import io.terminus.core.persistence.MatchRecord
 import io.terminus.core.persistence.RoundRecord
 import io.terminus.core.game.Player
+import io.terminus.core.game.Role
 import io.terminus.core.game.ScoreKeeper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -41,6 +42,10 @@ import kotlinx.coroutines.launch
  * appended to [roundRecords] (match scores accumulate inside `GameState.matchScores`).
  * Calling [startNextRound] (or submitting `StartRound` while in `ROUND_END`) rotates
  * roles and starts the next round; game time restarts at 0 per round.
+ *
+ * Sim-mode resume (ARCHITECTURE.md §5 `autosave.json`): the engine's round runtime is
+ * deliberately not serialized, so every applied command is recorded ([commandLog]) and
+ * a fresh runner reconstructs the exact runtime by [replay]ing the log before [start].
  */
 class GameRunner(
     cityFile: CityFile,
@@ -48,16 +53,18 @@ class GameRunner(
     private val timeSource: TimeSource,
     private val scope: CoroutineScope,
     private val ticker: Ticker = RealTicker(),
+    players: List<Player>? = null,
 ) {
     private val engine = GameEngine(cityFile)
     private val commands = Channel<GameCommand>(Channel.UNLIMITED)
     private val brains = mutableListOf<AiBrain>()
     private val lastBrainInvokeGameMillis = HashMap<PlayerId, Long>()
+    private val appliedCommands = ArrayList<GameCommand>()
     private var lastTickedGameMillis = 0L
     private var loopJob: Job? = null
     private var tickerJob: Job? = null
 
-    private val _state = MutableStateFlow(GameEngine.initialState(config))
+    private val _state = MutableStateFlow(GameEngine.initialState(config, players))
 
     /** The live game state; collect with `collectAsStateWithLifecycle` in the app. */
     val state: StateFlow<GameState> = _state
@@ -85,6 +92,20 @@ class GameRunner(
     /** Enqueues [command]; commands are applied strictly in submission order. */
     fun submit(command: GameCommand) {
         commands.trySend(command)
+    }
+
+    /** A snapshot of every applied command, in order (the sim-mode autosave payload). */
+    fun commandLog(): List<GameCommand> = synchronized(appliedCommands) { appliedCommands.toList() }
+
+    /**
+     * Replays [commands] through the reducer before [start] (sim-mode resume): the
+     * registered brains are invoked exactly as in the live run — so their seeded RNG
+     * streams and internal caches advance identically — but their outputs are
+     * discarded, because the log already contains every command they produced.
+     */
+    fun replay(commands: List<GameCommand>) {
+        check(loopJob == null) { "replay before start()" }
+        for (command in commands) process(command, liveBrains = false)
     }
 
     /** Launches the command loop and the ticker. Call once. */
@@ -136,10 +157,13 @@ class GameRunner(
         )
     }
 
-    private suspend fun process(command: GameCommand) {
-        val (next, emitted) = engine.reduce(_state.value, command)
+    private fun process(command: GameCommand, liveBrains: Boolean = true) {
+        val previous = _state.value
+        val (next, emitted) = engine.reduce(previous, command)
+        synchronized(appliedCommands) { appliedCommands += command }
         _state.value = next
-        for (event in emitted) _events.emit(event)
+        // The flow drops oldest on overflow, so tryEmit never fails or suspends.
+        for (event in emitted) _events.tryEmit(event)
         if (emitted.any { it is GameEvent.RoundEnded }) {
             roundRecords += engine.buildRoundRecord(next)
         }
@@ -152,8 +176,24 @@ class GameRunner(
                 val last = lastBrainInvokeGameMillis[brain.playerId] ?: 0L
                 if (now - last >= brain.decisionTickMillis) {
                     lastBrainInvokeGameMillis[brain.playerId] = now
-                    brain.decide(next, now).forEach(::submit)
+                    val decided = brain.decide(next, now)
+                    if (liveBrains) decided.forEach(::submit)
                 }
+            }
+        }
+        // W7 contract: an AI hider must get a chance to veto/decoy the moment a
+        // question's 20 s response window opens (GAME_DESIGN.md §3) — its regular
+        // decision tick may be longer than the window. Deterministic: a pure
+        // function of the command stream, like the tick-boundary invocations.
+        val window = next.pendingQuestion
+        if (window != null && window != previous.pendingQuestion &&
+            next.phase != GamePhase.ROUND_END && !next.paused
+        ) {
+            val hiderId = next.roles.entries.firstOrNull { it.value == Role.HIDER }?.key
+            val hiderBrain = brains.firstOrNull { it.playerId == hiderId }
+            if (hiderBrain != null) {
+                val decided = hiderBrain.decide(next, next.gameTimeMillis)
+                if (liveBrains) decided.forEach(::submit)
             }
         }
     }

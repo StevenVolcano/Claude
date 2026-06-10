@@ -1,10 +1,13 @@
 package io.terminus.app.nav
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import io.terminus.app.data.AppStorage
 import io.terminus.app.di.ActiveSessionHolder
 import io.terminus.app.ui.cities.CityManagerScreen
 import io.terminus.app.ui.cities.ImportScreen
@@ -44,12 +47,21 @@ fun TerminusNavHost() {
 
     NavHost(navController = navController, startDestination = Routes.HOME) {
         composable(Routes.HOME) {
+            val context = LocalContext.current
+            val storage = remember(it) { AppStorage(context) }
+            // A live in-process session, or a sim-mode autosave from a previous
+            // process that can be rebuilt by command-log replay (ARCHITECTURE.md §5).
+            val hasAutosave = remember(it) { storage.loadAutosave() != null }
             HomeScreen(
-                hasActiveGame = ActiveSessionHolder.session != null,
+                hasActiveGame = ActiveSessionHolder.session != null || hasAutosave,
                 onNewGame = { navController.navigate(Routes.SETUP) },
                 onCities = { navController.navigate(Routes.CITIES) },
                 onHistory = { navController.navigate(Routes.HISTORY) },
-                onResume = { navController.navigate(Routes.GAME) },
+                onResume = {
+                    val ready = ActiveSessionHolder.session != null ||
+                        ActiveSessionHolder.resumeFromAutosave(storage)
+                    if (ready) navController.navigate(Routes.GAME)
+                },
             )
         }
 

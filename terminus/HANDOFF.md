@@ -2,7 +2,7 @@
 
 > Living document for session continuity. Updated by the orchestrator at every
 > phase commit. If a session dies, a fresh session can resume from here.
-> Last updated: 2026-06-10 ~14:20 UTC.
+> Last updated: 2026-06-10 (Phase 3 integration complete).
 
 ## What this project is
 
@@ -15,7 +15,7 @@ GTFS imports, bundled synthetic demo cities). No server, no accounts.
 
 - Branch: `claude/jet-lag-android-game-q54kzg` (repo `StevenVolcano/Claude`); never push elsewhere.
 - Specs (binding): `terminus/GAME_DESIGN.md`, `terminus/ARCHITECTURE.md`.
-- Build: `cd terminus && ./gradlew :core:test` (pure-JVM core; **205 tests green** as of Phase 1).
+- Build: `cd terminus && ./gradlew :core:test` (pure-JVM core; **279 tests green** as of Phase 3).
   The `:app` Android module is included only when an Android SDK is present
   (this cloud container has none and cannot reach dl.google.com). CI workflow
   `.github/workflows/terminus-build.yml` runs core tests + builds a
@@ -34,7 +34,7 @@ GTFS imports, bundled synthetic demo cities). No server, no accounts.
 | 2 W6 | game reducer + GameRunner | DONE (34 tests; full suite 274 green). Round seed = (config.seed ?: 0) + roundIndex; RoundEnded has no record payload — use GameRunner.roundRecords; sim resume needs command-log replay (engine runtime not serialized) |
 | 2 W7 | AI brains (candidate set, info gain, personalities) | DONE (35 tests), committed. Brains rebuild candidate state by replaying eventLog; W6 must invoke hider brain when a response window opens (see agent caveats in commit history) |
 | 2 W8 | Android app module | DONE (36 files; verified with embedded Kotlin compiler against core — only Android-SDK symbols unresolved, expected). Cannot compile in this container; CI builds the APK. Phase 3 wiring points listed in app/README.md |
-| 3 | Integration: wire W7 brains into W6 runner + app `di/GameSessionFactory.kt`, AI-vs-AI smoke test (seed 42, byte-identical event logs), full-suite verify | NOT STARTED |
+| 3 | Integration: W7→W6 brain wiring (`engine/BrainAdapter.kt`: `asAiBrain` + per-round `RoundAwareAiBrain` + `aiBrainsFor`), §6-item-8 smoke test + 3-round match test (`core/src/test/.../integration/`), sim autosave/resume via command-log replay (`persistence.ReplayLog` + `GameRunner.commandLog/replay` + `engine.Replay`), real app `GameSessionFactory`/autosave/Resume wiring | DONE (279 tests green). Notes: `TerminusJson` classDiscriminator is now `"kind"` (default `"type"` collided with `CardPlayed.type`/`PlayCard.type` — polymorphic persistence would have crashed); `GameRunner` now invokes the hider brain the moment a response window opens (W7 caveat); seed-42 smoke round ends by expiry (hider DV-A14, score 63.0), 3-round match has a round-2 capture and winner ai-2 |
 
 ## Key integration contracts (told to in-flight agents)
 
@@ -48,12 +48,10 @@ GTFS imports, bundled synthetic demo cities). No server, no accounts.
 - DemoCities ids: `DV-A01..A14`, `DV-B01..B13` (no B07), `DV-C01..C12` (no C03/C09); start `DV-A07` Central Cross. Saltmarsh `PS-*`, start `PS-S04` Town Hall. Loops have no termini — use `station.isTerminus`.
 - Test resources: `core/src/test/resources/cities/*.city.json.gz`; regenerate via `TERMINUS_CITY_ARTIFACTS_ROOT=/home/user/Claude/terminus ./gradlew :core:test --tests 'io.terminus.core.cityfile.*'`.
 
-## Remaining work after in-flight agents land
+## Remaining work
 
-1. Commit W6/W7/W8 results (verify `./gradlew :core:test` full-green first; commit per workstream as earlier in history).
-2. Phase 3 integration agent: implement `GameSessionFactory` against real `GameRunner` + W7 brains; ARCHITECTURE §6 item 8 smoke test (AI hider vs 2 AI seekers, Demoville, sim, seed 42, terminates ≤45 sim-min, deterministic event logs); autosave/resume wiring check; full suite green.
-3. Final review pass (orchestrator): docs accuracy, README at terminus/ root (how to play/build), push, confirm CI core-tests job green and APK job builds.
-4. Report to user: how to download the APK artifact and sideload.
+1. Final review pass (orchestrator): docs accuracy, README at terminus/ root (how to play/build), push, confirm CI core-tests job green and the APK job builds (the app module compiles only in CI — this container has no Android SDK; Phase 3 app changes were type-checked file-by-file against the core jar with the embedded Kotlin compiler, only Android-SDK symbols unresolved).
+2. Report to user: how to download the APK artifact and sideload.
 
 ## Session-limit protocol (user instruction, 2026-06-10)
 

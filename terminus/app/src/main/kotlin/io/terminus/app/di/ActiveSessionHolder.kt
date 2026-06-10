@@ -1,5 +1,6 @@
 package io.terminus.app.di
 
+import io.terminus.app.data.AppStorage
 import io.terminus.core.cityfile.CityFile
 import io.terminus.core.game.GameConfig
 import io.terminus.core.game.PlayerId
@@ -39,6 +40,24 @@ object ActiveSessionHolder {
         cityFile = city
         session = newSession
         return newSession
+    }
+
+    /**
+     * Rebuilds a session from the sim-mode autosave by command-log replay
+     * (ARCHITECTURE.md §5 `autosave.json`); false when no usable autosave exists.
+     * Backs Home's *Resume* after a process death.
+     */
+    @Synchronized
+    fun resumeFromAutosave(storage: AppStorage): Boolean {
+        val log = storage.loadAutosave() ?: return false
+        val city = storage.loadCity(log.cityId) ?: return false
+        stop()
+        val newScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+        val newSession = GameSessionFactory.resume(log, city, newScope)
+        scope = newScope
+        cityFile = city
+        session = newSession
+        return true
     }
 
     /** Closes the active session, if any. */

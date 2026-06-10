@@ -1040,20 +1040,30 @@ class GameEngine(private val cityFile: CityFile) {
         fun resolvedSeed(config: GameConfig, roundIndex: Int): Long =
             (config.seed ?: 0L) + roundIndex
 
-        /** A fresh pre-round state for [config]: one human plus the configured AIs. */
-        fun initialState(config: GameConfig): GameState {
-            val players = buildList {
+        /**
+         * A fresh pre-round state for [config]: one human plus the configured AIs.
+         * [players] lets the app substitute display names (GAME_DESIGN.md §1.3 still
+         * holds: exactly one human, AIs parallel to `config.aiOpponents`).
+         */
+        fun initialState(config: GameConfig, players: List<Player>? = null): GameState {
+            val roster = players ?: buildList {
                 add(Player.HumanPlayer(HUMAN_PLAYER_ID, "You"))
                 config.aiOpponents.forEachIndexed { index, difficulty ->
                     add(Player.AiPlayer(PlayerId("ai-${index + 1}"), "AI ${index + 1}", difficulty))
                 }
+            }
+            require(roster.count { it is Player.HumanPlayer } == 1) {
+                "exactly one human participant (GAME_DESIGN.md §1.3)"
+            }
+            require(roster.count { it is Player.AiPlayer } == config.aiOpponents.size) {
+                "player list must carry one AI per config.aiOpponents entry"
             }
             return GameState(
                 config = config,
                 roundIndex = 0,
                 phase = GamePhase.SETUP,
                 gameTimeMillis = 0L,
-                players = players,
+                players = roster,
                 roles = emptyMap(),
                 positions = emptyMap(),
             )
