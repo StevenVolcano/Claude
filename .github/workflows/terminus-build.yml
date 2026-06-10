@@ -1,0 +1,47 @@
+name: Terminus build
+
+on:
+  push:
+    branches: ["claude/jet-lag-android-game-q54kzg", "main", "master"]
+    paths: ["terminus/**", ".github/workflows/terminus-build.yml"]
+  workflow_dispatch:
+
+jobs:
+  core-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Run core test suite
+        working-directory: terminus
+        run: ./gradlew :core:test
+      - name: Upload test reports
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: core-test-reports
+          path: terminus/core/build/reports/tests/test
+
+  android-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+      - uses: gradle/actions/setup-gradle@v4
+      # ubuntu-latest runners ship with the Android SDK preinstalled and
+      # ANDROID_HOME set, so settings.gradle.kts auto-includes :app.
+      - name: Assemble debug APK
+        working-directory: terminus
+        run: ./gradlew :app:assembleDebug
+      - name: Upload APK (sideloadable)
+        uses: actions/upload-artifact@v4
+        with:
+          name: terminus-debug-apk
+          path: terminus/app/build/outputs/apk/debug/app-debug.apk
