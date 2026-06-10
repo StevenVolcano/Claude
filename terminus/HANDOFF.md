@@ -50,8 +50,16 @@ GTFS imports, bundled synthetic demo cities). No server, no accounts.
 
 ## Remaining work
 
-1. Final review pass (orchestrator): docs accuracy, README at terminus/ root (how to play/build), push, confirm CI core-tests job green and the APK job builds (the app module compiles only in CI — this container has no Android SDK; Phase 3 app changes were type-checked file-by-file against the core jar with the embedded Kotlin compiler, only Android-SDK symbols unresolved).
-2. Report to user: how to download the APK artifact and sideload.
+None — project complete. CI run 27287090206 (commit df18424) is fully green:
+core-tests (279 tests) + android-apk both pass; the sideloadable
+`terminus-debug-apk` artifact (10.8 MB) builds on every push. CI fixes that
+were needed: AGP on the root classpath via conditional buildscript block
+(classloader visibility for the Kotlin Android plugin), and
+`gradle.properties` with `android.useAndroidX=true`.
+
+Possible future work: GPS-mode field testing on a real device, Play-style
+release signing, screenshot/UI tests, more bundled cities, multi-device
+multiplayer.
 
 ## Session-limit protocol (user instruction, 2026-06-10)
 
