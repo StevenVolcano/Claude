@@ -168,18 +168,27 @@ class SimulationEngineTest {
         edges = listOf(edgeAB),
     )
 
+    private fun assertLatLngEquals(expected: LatLng, actual: LatLng?, epsilon: Double = 1e-9) {
+        assertTrue(
+            actual != null &&
+                abs(expected.lat - actual.lat) < epsilon &&
+                abs(expected.lon - actual.lon) < epsilon,
+            "expected $expected, was $actual",
+        )
+    }
+
     @Test
     fun latLngOfInterpolatesEdgePositionsLinearly() {
         val mid = SimulationEngine.latLngOf(
             PlayerPosition.EdgePosition("A", "B", "R1", 0.5),
             network,
         )
-        assertEquals(LatLng(52.00, 5.005), mid)
+        assertLatLngEquals(LatLng(52.00, 5.005), mid)
         val quarter = SimulationEngine.latLngOf(
             PlayerPosition.EdgePosition("A", "B", "R1", 0.25),
             network,
         )
-        assertEquals(LatLng(52.00, 5.0025), quarter)
+        assertLatLngEquals(LatLng(52.00, 5.0025), quarter)
     }
 
     @Test
