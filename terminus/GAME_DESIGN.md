@@ -158,7 +158,36 @@ Each AI seeker team maintains one shared **CandidateSet**: a weight `w(s) ∈ [0
 - **Movement**: target = the station maximizing `w(s) / (1 + travelTimeMinutes(seeker → s)/10)`; path via time-weighted Dijkstra; re-plan on every tick where the target changed. With multiple AI seekers, **Hard** assigns seekers to distinct weight clusters (greedy: each seeker claims the best unclaimed cluster among the top-k weighted stations grouped by 4-hop neighborhoods); Easy/Medium all chase the same best target.
 - **Endgame**: when a seeker is at the top-weighted station and `w(top) > 0.5`, it commits and triggers Final Approach behavior on arrival in the zone.
 
-### 6.4 Difficulty summary
+### 6.4 Personalities (gameplay styles)
+
+Every AI player is additionally assigned a **personality** — a consistent play style held for the whole round. Personality is orthogonal to difficulty: difficulty sets *competence* (decision tick rate, filtering accuracy, info-gain quality), personality sets *style*. Personalities are drawn per AI per round from the round seed **without replacement** (two AIs in the same round never share one), so they are deterministic for a given seed. By default they are **hidden** — the player experiences them only through behavior — but setup offers Hidden / Revealed / Manual-per-AI.
+
+A personality is a `PersonalityProfile` of modifiers applied on top of the difficulty profile:
+
+| Modifier | Meaning |
+|---|---|
+| `temperature` | randomness when choosing among scored options (0 = always best; high = near-random) |
+| `spotWeights` (T, R, A, rand) | overrides the hider spot-scoring weights of §6.1 |
+| `obscurityBias` | extra weight for low-degree, non-interchange, non-terminus stations (hider) and for checking low-weight candidates (seeker) |
+| `cardAggression` ∈ [0,1] | how early/freely curses and bonuses are played vs hoarded |
+| `decoyPropensity` ∈ [0,1] | probability of spending Ghost Echo when eligible |
+| `vetoDelta` (bits) | adjustment to the difficulty's veto threshold (negative = vetoes more) |
+| `questionRate` ∈ [0,1] | probability of asking as soon as cooldowns allow vs traveling first (seeker) |
+| `commitment` ∈ [0,1] | how sticky the seeker's current target is before re-planning |
+
+The five personalities:
+
+| Personality | Style | Key modifiers |
+|---|---|---|
+| **The Rat** | Rat mode — chaotic and unreadable. Near-random hiding spot, near-random question/target choice, erratic card play. | temperature 2.0; spotWeights (0, 0, 0, 1); cardAggression random per tick; questionRate 0.5; commitment 0.2 |
+| **The Ghost** | Obscure-stop exploiter. Hides at remote, low-salience stations no one thinks of; as a seeker, distrusts the obvious and sweeps unlikely candidates. | temperature 0.3; spotWeights (0.20, 0.45, 0.25, 0.10); obscurityBias strong (rejects interchanges and termini outright as hider); vetoDelta −0.3; questionRate 0.6 |
+| **The Bookkeeper** | Information maximizer. As seeker, asks at every cooldown and moves only on confidence; as hider, vetoes high-gain questions and hoards utility cards. | temperature 0.1; questionRate 1.0; commitment: moves only when top weight > 0.4; vetoDelta −0.4; cardAggression 0.3 |
+| **The Bloodhound** | Movement-first. As seeker, commits early to the top candidate and travels hard, asking only cheap questions en route; as hider, picks the farthest reachable spot and burns movement curses early. | temperature 0.2; spotWeights (0.60, 0.20, 0.05, 0.15); questionRate 0.3; commitment 0.9; vetoDelta +0.5; cardAggression 0.7 (movement curses first) |
+| **The Showman** | Card-aggressive gambler. Plays curses, decoys, and bonuses the moment they're legal; as seeker, chases the latest answer region aggressively and re-plans constantly. | temperature 0.6; cardAggression 0.9; decoyPropensity 0.9; questionRate 0.8; commitment 0.3 |
+
+Determinism rule: all personality-driven randomness (temperature draws, Rat's choices) consumes the same seeded RNG stream as the rest of the AI, so a round replayed with the same seed is identical.
+
+### 6.5 Difficulty summary
 
 | Parameter | Easy | Medium | Hard |
 |---|---|---|---|
@@ -189,7 +218,7 @@ Each AI seeker team maintains one shared **CandidateSet**: a weight `w(s) ∈ [0
 5. **Mode**: GPS / Couch (sim). Sim only: **time scale** {1,2,5,10,30}×, default 10×.
 6. **Durations**: game duration slider 20–180 min (default 60 GPS / 45 sim, in game time); hiding phase slider 5–30 min (default 15 GPS / 10 sim).
 7. **Question cooldown multiplier**: ×0.5 / ×1 / ×2.
-8. **Opponents**: number of AI players 1–3; per-AI difficulty Easy/Medium/Hard; **role selection**: human plays Hider or Seeker (if Seeker, exactly one AI is the hider and remaining AI are co-seekers).
+8. **Opponents**: number of AI players 1–3; per-AI difficulty Easy/Medium/Hard; **personalities**: Hidden (default — drawn from the round seed, revealed only on the end screen) / Revealed / Manual per AI (pick from the five styles of §6.4); **role selection**: human plays Hider or Seeker (if Seeker, exactly one AI is the hider and remaining AI are co-seekers).
 9. **Rounds**: 1 / 3 / 5.
 10. **RNG seed**: auto (timestamp) or manual entry (for replays).
 11. **Save as preset** (named) / load preset.
