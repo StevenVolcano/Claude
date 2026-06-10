@@ -32,7 +32,7 @@ GTFS imports, bundled synthetic demo cities). No server, no accounts.
 | 1 W4 | deck/hand/card engine + GPS effect enforcer | DONE (74 tests), committed |
 | 1 W5 | time sources, path planner, simulation, sweep | DONE (49 tests), committed |
 | 2 W6 | game reducer + GameRunner | **IN FLIGHT** (agent relaunched 14:14 UTC after limit cutoff; first attempt wrote nothing) |
-| 2 W7 | AI brains (candidate set, info gain, personalities) | **IN FLIGHT** (same relaunch) |
+| 2 W7 | AI brains (candidate set, info gain, personalities) | DONE (35 tests), committed. Brains rebuild candidate state by replaying eventLog; W6 must invoke hider brain when a response window opens (see agent caveats in commit history) |
 | 2 W8 | Android app module | partial committed (26 files: manifest, theme, map, home/cities/import, VMs, storage, GPS service, di facade); completion agent **IN FLIGHT** for MainActivity/nav, setup/game/end/history screens, strings, README |
 | 3 | Integration: wire W7 brains into W6 runner + app `di/GameSessionFactory.kt`, AI-vs-AI smoke test (seed 42, byte-identical event logs), full-suite verify | NOT STARTED |
 
