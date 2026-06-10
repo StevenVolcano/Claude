@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Compose draws everything; the platform theme only styles the window. -->
+    <style name="Theme.Terminus" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/terminus_window_background</item>
+        <item name="android:statusBarColor">@color/terminus_window_background</item>
+    </style>
+</resources>
