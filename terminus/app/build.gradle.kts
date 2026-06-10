@@ -1,9 +1,9 @@
 plugins {
-    // AGP is versioned here (not in the root build script): its artifacts are only on
-    // Google's Maven repository, and :app is only included when an Android SDK is
-    // present (settings.gradle.kts), so :core-only environments never resolve it.
-    id("com.android.application") version "8.7.3"
-    // Versions for the Kotlin plugins come from the root build script's plugins block.
+    // No versions here: AGP is added to the root build classpath via the root
+    // build script's conditional buildscript block, and the Kotlin plugin
+    // versions come from the root plugins block. Everything therefore loads in
+    // one classloader, which the Kotlin Android plugin requires to see AGP.
+    id("com.android.application")
     kotlin("android")
     id("org.jetbrains.kotlin.plugin.compose")
     kotlin("plugin.serialization")
