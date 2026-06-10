@@ -1,4 +1,4 @@
-rootProject.name = "transit-hideout"
+rootProject.name = "terminus"
 
 include(":core")
 
