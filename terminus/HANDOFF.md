@@ -31,7 +31,7 @@ GTFS imports, bundled synthetic demo cities). No server, no accounts.
 | 1 W3 | question engine + cooldown tracker | DONE (27 tests), committed |
 | 1 W4 | deck/hand/card engine + GPS effect enforcer | DONE (74 tests), committed |
 | 1 W5 | time sources, path planner, simulation, sweep | DONE (49 tests), committed |
-| 2 W6 | game reducer + GameRunner | **IN FLIGHT** (agent relaunched 14:14 UTC after limit cutoff; first attempt wrote nothing) |
+| 2 W6 | game reducer + GameRunner | DONE (34 tests; full suite 274 green). Round seed = (config.seed ?: 0) + roundIndex; RoundEnded has no record payload — use GameRunner.roundRecords; sim resume needs command-log replay (engine runtime not serialized) |
 | 2 W7 | AI brains (candidate set, info gain, personalities) | DONE (35 tests), committed. Brains rebuild candidate state by replaying eventLog; W6 must invoke hider brain when a response window opens (see agent caveats in commit history) |
 | 2 W8 | Android app module | DONE (36 files; verified with embedded Kotlin compiler against core — only Android-SDK symbols unresolved, expected). Cannot compile in this container; CI builds the APK. Phase 3 wiring points listed in app/README.md |
 | 3 | Integration: wire W7 brains into W6 runner + app `di/GameSessionFactory.kt`, AI-vs-AI smoke test (seed 42, byte-identical event logs), full-suite verify | NOT STARTED |

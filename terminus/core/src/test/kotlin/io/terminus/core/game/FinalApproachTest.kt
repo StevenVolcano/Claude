@@ -55,6 +55,8 @@ class FinalApproachTest {
         val h = EngineHarness(EngineHarness.gpsConfig(humanRole = Role.SEEKER, hidingPhaseMinutes = 5))
         h.start()
         h.tick(5 * 60_000L) // AI hider parked at start: grace begins
+        // Step away from the start node so the parked hider is not captured meanwhile.
+        h.gpsFix(h.humanId, GeoMath.destinationPoint(h.stationLatLng("DV-A07"), 0.0, 500.0))
         h.tick(3 * 60_000L) // grace fails: zone = nearest valid station (app-picked)
         val zone = checkNotNull(h.state.hiderZoneStationId)
 
