@@ -22,12 +22,37 @@ enum class Role {
     SEEKER,
 }
 
-/** AI difficulty level (GAME_DESIGN.md §6.4, §8 item 8). */
+/** AI difficulty level — sets *competence* (GAME_DESIGN.md §6.5, §8 item 8). */
 @Serializable
 enum class Difficulty {
     EASY,
     MEDIUM,
     HARD,
+}
+
+/**
+ * AI personality — a per-round play *style* orthogonal to difficulty
+ * (GAME_DESIGN.md §6.4). Drawn per AI per round from the round seed without
+ * replacement; hidden by default. The modifier values live in
+ * `io.terminus.core.ai.PersonalityProfile` (W7's package); the enum lives here so
+ * `GameConfig`/`GameState` need not depend on `ai`.
+ */
+@Serializable
+enum class AiPersonality(val displayName: String) {
+    /** Chaotic and unreadable: near-random spot, question, and target choices. */
+    RAT("The Rat"),
+
+    /** Obscure-stop exploiter: remote, low-salience stations; distrusts the obvious. */
+    GHOST("The Ghost"),
+
+    /** Information maximizer: asks at every cooldown, moves only on confidence. */
+    BOOKKEEPER("The Bookkeeper"),
+
+    /** Movement-first: commits early and travels hard, cheap questions en route. */
+    BLOODHOUND("The Bloodhound"),
+
+    /** Card-aggressive gambler: plays curses, decoys, and bonuses the moment they're legal. */
+    SHOWMAN("The Showman"),
 }
 
 /**

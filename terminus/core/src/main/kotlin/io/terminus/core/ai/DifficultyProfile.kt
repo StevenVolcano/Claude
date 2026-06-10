@@ -3,7 +3,7 @@ package io.terminus.core.ai
 import io.terminus.core.game.Difficulty
 import kotlinx.serialization.Serializable
 
-/** How an AI seeker team chooses its next question (GAME_DESIGN.md §6.3, §6.4). */
+/** How an AI seeker team chooses its next question (GAME_DESIGN.md §6.3, §6.5). */
 @Serializable
 enum class QuestionChoiceStrategy {
     /** Easy: uniform pick among the top 3 by expected entropy reduction. */
@@ -16,7 +16,7 @@ enum class QuestionChoiceStrategy {
     MAX_GAIN_PER_COST,
 }
 
-/** How an AI hider scores candidate hiding spots (GAME_DESIGN.md §6.1, §6.4). */
+/** How an AI hider scores candidate hiding spots (GAME_DESIGN.md §6.1, §6.5). */
 @Serializable
 enum class SpotScoringStrategy {
     /** Easy: uniform pick from the top 50% by travel-time term T only. */
@@ -29,7 +29,7 @@ enum class SpotScoringStrategy {
     FULL_WITH_SALIENCE_REJECTION,
 }
 
-/** When an AI hider plays Conductor's Override (GAME_DESIGN.md §6.2, §6.4). */
+/** When an AI hider plays Conductor's Override (GAME_DESIGN.md §6.2, §6.5). */
 @Serializable
 enum class VetoPolicy {
     /** Easy: never veto. */
@@ -43,8 +43,10 @@ enum class VetoPolicy {
 }
 
 /**
- * Per-difficulty AI tuning — the exact table from GAME_DESIGN.md §6.4
- * (ARCHITECTURE.md §1.1 `ai`). Brains and `CandidateSet` are W7's.
+ * Per-difficulty AI tuning — the exact table from GAME_DESIGN.md §6.5
+ * (ARCHITECTURE.md §1.1 `ai`). Difficulty sets competence; per-round style modifiers
+ * are layered on top via [PersonalityProfile] (GAME_DESIGN.md §6.4).
+ * Brains and `CandidateSet` are W7's.
  *
  * @property decisionTickSeconds AI decision-tick interval in game seconds.
  * @property answerFilterEpsilon CandidateSet weight multiplier for answer-inconsistent
@@ -71,7 +73,7 @@ data class DifficultyProfile(
     val decoyAnswerEpsilon: Double? = null,
 ) {
     companion object {
-        /** Easy column of the GAME_DESIGN.md §6.4 table. */
+        /** Easy column of the GAME_DESIGN.md §6.5 table. */
         val EASY = DifficultyProfile(
             decisionTickSeconds = 45,
             answerFilterEpsilon = 0.15,
@@ -83,7 +85,7 @@ data class DifficultyProfile(
             decoyAnswerEpsilon = 0.5,
         )
 
-        /** Medium column of the GAME_DESIGN.md §6.4 table. */
+        /** Medium column of the GAME_DESIGN.md §6.5 table. */
         val MEDIUM = DifficultyProfile(
             decisionTickSeconds = 25,
             answerFilterEpsilon = 0.05,
@@ -95,7 +97,7 @@ data class DifficultyProfile(
             decoyAnswerEpsilon = null,
         )
 
-        /** Hard column of the GAME_DESIGN.md §6.4 table. */
+        /** Hard column of the GAME_DESIGN.md §6.5 table. */
         val HARD = DifficultyProfile(
             decisionTickSeconds = 15,
             answerFilterEpsilon = 0.0,

@@ -25,6 +25,21 @@ enum class CooldownMultiplier(val factor: Double) {
 }
 
 /**
+ * How AI personalities are assigned and shown (GAME_DESIGN.md §6.4, §8 item 8).
+ */
+@Serializable
+enum class AiPersonalityMode {
+    /** Default: drawn from the round seed without replacement, revealed only on the end screen. */
+    HIDDEN,
+
+    /** Drawn from the round seed but shown to the player from the start. */
+    REVEALED,
+
+    /** Chosen per AI in setup via `GameConfig.manualPersonalities`. */
+    MANUAL,
+}
+
+/**
  * The configured game boundary (GAME_DESIGN.md §8 item 2). Stations outside are excluded
  * and the network is clipped (via `TransitNetwork.clipTo`).
  */
@@ -72,6 +87,10 @@ sealed class BoundarySpec {
  *   default 15 GPS / 10 sim (§8 item 6).
  * @property cooldownMultiplier scales all question cooldowns (§8 item 7).
  * @property aiOpponents difficulty per AI player, size 1–3 (§8 item 8).
+ * @property aiPersonalityMode how AI personalities are assigned/shown (§6.4, §8 item 8).
+ * @property manualPersonalities personality per AI when [aiPersonalityMode] is MANUAL,
+ *   parallel to [aiOpponents] (same size and order); null otherwise. Two AIs never share
+ *   a personality (§6.4: drawn without replacement).
  * @property humanRole role of the human; if SEEKER, exactly one AI is the hider (§8 item 8).
  * @property rounds rounds per match: 1, 3, or 5 (§7, §8 item 9).
  * @property seed RNG seed; null means auto (timestamp at round start) (§8 item 10).
@@ -89,6 +108,8 @@ data class GameConfig(
     val hidingPhaseMinutes: Int = 15,
     val cooldownMultiplier: CooldownMultiplier = CooldownMultiplier.NORMAL,
     val aiOpponents: List<Difficulty> = listOf(Difficulty.MEDIUM),
+    val aiPersonalityMode: AiPersonalityMode = AiPersonalityMode.HIDDEN,
+    val manualPersonalities: List<AiPersonality>? = null,
     val humanRole: Role = Role.HIDER,
     val rounds: Int = 1,
     val seed: Long? = null,

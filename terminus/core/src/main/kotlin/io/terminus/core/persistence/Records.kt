@@ -1,5 +1,6 @@
 package io.terminus.core.persistence
 
+import io.terminus.core.game.AiPersonality
 import io.terminus.core.game.GameConfig
 import io.terminus.core.game.GameEvent
 import io.terminus.core.game.Player
@@ -28,6 +29,8 @@ data class OptionsPreset(
  * @property seed the round's resolved RNG seed (manual entry enables replays, §8 item 10).
  * @property hiderId who hid this round.
  * @property roles role per player.
+ * @property aiPersonalities personality per AI player this round; hidden personalities are
+ *   revealed on the end screen from this record (GAME_DESIGN.md §6.4, §8 item 8).
  * @property hidingStationId the hider's (final) hiding-zone station, null if never hidden.
  * @property captured true when the hider was found before clock expiry.
  * @property capturedBy the capturing seeker credited on the round summary ("Caught by …"), if any.
@@ -50,6 +53,7 @@ data class RoundRecord(
     val seed: Long,
     val hiderId: PlayerId,
     val roles: Map<PlayerId, Role>,
+    val aiPersonalities: Map<PlayerId, AiPersonality> = emptyMap(),
     val hidingStationId: String? = null,
     val captured: Boolean,
     val capturedBy: PlayerId? = null,

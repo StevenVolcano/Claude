@@ -74,6 +74,9 @@ data class ArmedThermometer(
  * @property paused true while the sim-mode clock is paused (§2.2; GPS mode is never pausable).
  * @property players all participants in fixed rotation order (§7).
  * @property roles role per player for this round.
+ * @property aiPersonalities personality per AI player for this round, drawn from the round
+ *   seed without replacement or set manually (GAME_DESIGN.md §6.4); empty before assignment.
+ *   UI visibility is governed by `config.aiPersonalityMode`.
  * @property positions current position per player.
  * @property visitHistory per-seeker ordered station visit history (drives C8 U-Turn, §4.2).
  * @property hiderZoneStationId the station anchoring the hider's hiding zone, null until hidden (§5.1).
@@ -113,6 +116,7 @@ data class GameState(
     val paused: Boolean = false,
     val players: List<Player>,
     val roles: Map<PlayerId, Role>,
+    val aiPersonalities: Map<PlayerId, AiPersonality> = emptyMap(),
     val positions: Map<PlayerId, PlayerPosition>,
     val visitHistory: Map<PlayerId, List<String>> = emptyMap(),
     val hiderZoneStationId: String? = null,
