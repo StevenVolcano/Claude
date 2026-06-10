@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TERMINUS</string>
+
+    <!-- Shared actions -->
+    <string name="action_back">Back</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_clear">Clear</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_done">Done</string>
+    <string name="action_retry">Retry</string>
+    <string name="action_save">Save</string>
+    <string name="action_undo">Undo</string>
+
+    <!-- Home -->
+    <string name="home_tagline">Transit hide &amp; seek</string>
+    <string name="home_new_game">New game</string>
+    <string name="home_cities">Cities</string>
+    <string name="home_history">History</string>
+    <string name="home_resume">Resume game</string>
+
+    <!-- Phases (GAME_DESIGN.md §2.1) -->
+    <string name="phase_setup">Setup</string>
+    <string name="phase_hiding">Hiding phase</string>
+    <string name="phase_seeking">Seeking phase</string>
+    <string name="phase_final_approach">Final approach</string>
+    <string name="phase_round_end">Round over</string>
+
+    <!-- Transit modes -->
+    <string name="mode_metro">Metro</string>
+    <string name="mode_tram">Tram</string>
+    <string name="mode_bus">Bus</string>
+    <string name="mode_rail">Rail</string>
+    <string name="mode_ferry">Ferry</string>
+
+    <!-- Question categories (GAME_DESIGN.md §3) -->
+    <string name="q_cat_radius_ping">Radius Ping</string>
+    <string name="q_cat_compass_call">Compass Call</string>
+    <string name="q_cat_thermometer">Thermometer</string>
+    <string name="q_cat_line_check">Line Check</string>
+    <string name="q_cat_station_dossier">Station Dossier</string>
+    <string name="q_cat_lineup">Lineup</string>
+    <string name="q_cat_rail_range">Rail Range</string>
+
+    <!-- Question phrasing -->
+    <string name="q_text_radius_ping">Are you within %1$s of %2$s?</string>
+    <string name="q_center_seeker_position">my position</string>
+    <string name="q_text_compass_ns">Are you north or south of %1$s?</string>
+    <string name="q_text_compass_ew">Are you east or west of %1$s?</string>
+    <string name="q_text_thermometer">Warmer or colder than where I armed the thermometer?</string>
+    <string name="q_text_line_check">Does your nearest station serve line %1$s?</string>
+    <string name="q_text_dossier_interchange">Is your nearest station an interchange?</string>
+    <string name="q_text_dossier_terminus">Is your nearest station a terminus?</string>
+    <string name="q_text_dossier_mode">Is your nearest station a %1$s station?</string>
+    <string name="q_text_dossier_zone">Is your nearest station in fare zone %1$s?</string>
+    <string name="q_text_lineup">Is your nearest station one of: %1$s?</string>
+    <string name="q_text_rail_range">Are you within %1$d hops of %2$s?</string>
+
+    <!-- Answers -->
+    <string name="answer_yes">Yes</string>
+    <string name="answer_no">No</string>
+    <string name="answer_north">North</string>
+    <string name="answer_south">South</string>
+    <string name="answer_east">East</string>
+    <string name="answer_west">West</string>
+    <string name="answer_warmer">Warmer</string>
+    <string name="answer_colder">Colder</string>
+
+    <!-- Card effect one-liners (GAME_DESIGN.md §4.2) -->
+    <string name="card_effect_rush_hour_delay">+3:00 to your final score</string>
+    <string name="card_effect_express_skip">+5:00 to your final score</string>
+    <string name="card_effect_night_owl_service">+10:00 to your final score</string>
+    <string name="card_effect_stalled_train">Seekers may not move for 4:00</string>
+    <string name="card_effect_local_service">Seekers must dwell at every station for 10:00</string>
+    <string name="card_effect_tunnel_vision">Radius Ping disabled for 8:00</string>
+    <string name="card_effect_scrambled_signal">Next answer is withheld for 5:00</string>
+    <string name="card_effect_u_turn">Seekers must return to their previous station before asking again</string>
+    <string name="card_effect_ticket_inspection">Seekers must stay within 100 m of their nearest station for 3:00</string>
+    <string name="card_effect_detour">Pick a line; seekers may not use it for 12:00</string>
+    <string name="card_effect_conductors_override">Veto the pending question — no answer, no compensation</string>
+    <string name="card_effect_ghost_echo">Answer a Q1/Q2/Q3 from a decoy point within 1.5 km</string>
+    <string name="card_effect_transfer_slip">Leave the hiding zone and re-hide</string>
+    <string name="card_effect_lost_and_found">Discard up to 3 cards, draw the same number</string>
+    <string name="card_effect_found_wallet">Draw 2, keep 2</string>
+    <string name="card_effect_off_peak_pass">Next answered question grants double compensation</string>
+    <string name="card_effect_bigger_bag">Hand limit becomes 8 for the rest of the round</string>
+    <string name="card_effect_dead_zone">No questions may be asked for 6:00</string>
+    <string name="card_effect_service_change">Pick a category; its cooldown gains +5:00 for the round</string>
+    <string name="card_effect_golden_ticket">Draw 3, keep 3</string>
+
+    <!-- Activity log lines -->
+    <string name="event_phase_changed">Phase: %1$s</string>
+    <string name="event_question_asked">%1$s asked: %2$s</string>
+    <string name="event_answer_delivered">Answer: %1$s</string>
+    <string name="event_answer_vetoed">The hider vetoed the question (Conductor\'s Override)</string>
+    <string name="event_decoy_revealed">That answer was a decoy!</string>
+    <string name="event_card_played">%1$s played %2$s</string>
+    <string name="event_cards_drawn">The hider drew %1$d cards and kept %2$d</string>
+    <string name="event_curse_started">%1$s is now active</string>
+    <string name="event_curse_ended">%1$s has ended</string>
+    <string name="event_violation">%1$s violated a rule: %2$s</string>
+    <string name="event_penalty">Penalty: +%1$s min — %2$s</string>
+    <string name="event_hider_relocating">The hider is relocating!</string>
+    <string name="event_score_paused">The hider left their zone — score paused</string>
+    <string name="event_score_resumed">The hider is back in their zone — score resumed</string>
+    <string name="event_captured">%1$s caught %2$s!</string>
+    <string name="event_round_ended">Round %1$d over — %2$s scored %3$s</string>
+    <string name="event_paused">Game paused</string>
+    <string name="event_resumed">Game resumed</string>
+
+    <!-- Pickers -->
+    <string name="picker_none_selected">none</string>
+    <string name="picker_search">Search</string>
+
+    <!-- City manager -->
+    <string name="cities_title">Cities</string>
+    <string name="cities_import_gtfs">Import GTFS feed…</string>
+    <string name="cities_empty">No cities yet. Import a GTFS feed to get started.</string>
+    <string name="cities_demo_suffix">%1$s (demo city)</string>
+    <string name="cities_counts">%1$d stations · %2$d routes</string>
+    <string name="cities_delete_title">Delete city?</string>
+    <string name="cities_delete_text">The city file will be removed from this device.</string>
+
+    <!-- GTFS import flow -->
+    <string name="import_title">Import GTFS</string>
+    <string name="import_intro">Pick a GTFS zip file. Stops, routes, trips, and stop times are streamed and merged into a playable network.</string>
+    <string name="import_city_name">City name</string>
+    <string name="import_pick_zip">Pick GTFS zip…</string>
+    <string name="import_parsing">Parsing the feed…</string>
+    <string name="import_building">Building the network…</string>
+    <string name="import_boundary_hint">Tap the map to draw the play boundary (3–30 vertices), or use the full extent.</string>
+    <string name="import_use_full_extent">Full extent</string>
+    <string name="import_confirm_boundary">Confirm boundary (%1$d vertices)</string>
+    <string name="import_done_title">Imported %1$s</string>
+    <string name="import_report">Read %1$d stops, merged to %2$d stations, %3$d routes, %4$d edges, %5$d walking transfers; %6$d stops dropped outside the boundary.</string>
+    <string name="import_failed">Import failed: %1$s</string>
+
+    <!-- Setup screen (GAME_DESIGN.md §8) -->
+    <string name="setup_title">Game setup</string>
+    <string name="setup_city">City</string>
+    <string name="setup_no_cities">No cities available — import one first.</string>
+    <string name="setup_boundary">Boundary</string>
+    <string name="setup_boundary_full">Full extent</string>
+    <string name="setup_boundary_polygon">Polygon</string>
+    <string name="setup_boundary_circle">Circle</string>
+    <string name="setup_boundary_polygon_hint">Tap the map to add vertices (%1$d of 3–30).</string>
+    <string name="setup_boundary_circle_hint">Tap the map to place the circle\'s center.</string>
+    <string name="setup_circle_radius">Radius: %1$d km</string>
+    <string name="setup_transit">Allowed transit</string>
+    <string name="setup_start_station">Start station</string>
+    <string name="setup_start_station_hint">Default: the busiest interchange inside the boundary.</string>
+    <string name="setup_mode">Mode</string>
+    <string name="setup_mode_gps">GPS</string>
+    <string name="setup_mode_sim">Couch (sim)</string>
+    <string name="setup_time_scale">Time scale</string>
+    <string name="setup_durations">Durations</string>
+    <string name="setup_game_duration">Game length: %1$d min</string>
+    <string name="setup_hiding_duration">Hiding phase: %1$d min</string>
+    <string name="setup_cooldowns">Question cooldowns</string>
+    <string name="setup_opponents">Opponents</string>
+    <string name="setup_ai_count">Number of AI players</string>
+    <string name="setup_ai_label">AI opponent %1$d</string>
+    <string name="setup_ai_personality">Personality of AI %1$d</string>
+    <string name="setup_personality_mode">AI personalities</string>
+    <string name="personality_hidden">Hidden</string>
+    <string name="personality_revealed">Revealed</string>
+    <string name="personality_manual">Manual</string>
+    <string name="setup_human_role">You play as</string>
+    <string name="role_hider">Hider</string>
+    <string name="role_seeker">Seeker</string>
+    <string name="difficulty_easy">Easy</string>
+    <string name="difficulty_medium">Medium</string>
+    <string name="difficulty_hard">Hard</string>
+    <string name="setup_rounds">Rounds</string>
+    <string name="setup_seed">RNG seed</string>
+    <string name="setup_seed_hint">Seed (blank = auto)</string>
+    <string name="setup_presets">Presets</string>
+    <string name="setup_preset_save">Save as preset…</string>
+    <string name="setup_preset_load">Load</string>
+    <string name="setup_preset_name">Preset name</string>
+    <string name="setup_start_game">Start game</string>
+
+    <!-- Game screen -->
+    <string name="game_none_active">No game is running.</string>
+    <string name="game_clock">%1$s / %2$s</string>
+    <string name="game_pause">Pause</string>
+    <string name="game_resume">Resume</string>
+    <string name="game_summary">Summary</string>
+    <string name="game_quit">Quit</string>
+    <string name="game_quit_title">Abandon game?</string>
+    <string name="game_quit_text">The round will end without being recorded.</string>
+    <string name="game_quit_confirm">Abandon</string>
+    <string name="game_tab_questions">Questions</string>
+    <string name="game_tab_cards">Cards</string>
+    <string name="game_tab_log">Log</string>
+    <string name="game_move_hint">Tap a station to travel there.</string>
+    <string name="game_move_locked">Movement is locked right now.</string>
+    <string name="log_empty">Nothing has happened yet.</string>
+
+    <!-- Question panel -->
+    <string name="questions_seekers_only">Only seekers ask questions. Your cards are in the Cards tab.</string>
+    <string name="questions_locked_hiding">Questions unlock when the seeking phase begins.</string>
+    <string name="questions_locked_final">Questions are disabled now.</string>
+    <string name="questions_dead_zone">Dead Zone — questions locked for %1$s</string>
+    <string name="questions_pending">Waiting for the hider\'s response…</string>
+    <string name="questions_global_cooldown">Next question in %1$s</string>
+    <string name="questions_thermometer_armed">Thermometer armed — keep moving to resolve it.</string>
+    <string name="questions_thermometer_hint">Arms at your current position; resolves after you move far enough.</string>
+    <string name="questions_ready">Ready</string>
+    <string name="questions_ready_in">Ready in %1$s</string>
+    <string name="questions_tunnel_vision">Disabled by Tunnel Vision</string>
+    <string name="questions_ask">Ask</string>
+    <string name="questions_center_station">Center station</string>
+    <string name="questions_reference_station">Reference station</string>
+    <string name="questions_axis_ns">North/South</string>
+    <string name="questions_axis_ew">East/West</string>
+    <string name="questions_route">Line</string>
+    <string name="questions_dossier_interchange">Interchange?</string>
+    <string name="questions_dossier_terminus">Terminus?</string>
+    <string name="questions_dossier_mode">Mode</string>
+    <string name="questions_dossier_zone">Zone</string>
+    <string name="questions_lineup_station">Station %1$d</string>
+    <string name="questions_hops">%1$d hops</string>
+
+    <!-- Hand panel -->
+    <string name="hand_hider_only">Cards are hider-only. Active effects appear above.</string>
+    <string name="hand_active_effects">Active effects</string>
+    <string name="hand_effect_untimed">active</string>
+    <string name="hand_counts">Hand %1$d/%2$d · Deck %3$d · Discard %4$d</string>
+    <string name="hand_empty">Your hand is empty — answers earn you cards.</string>
+    <string name="hand_play">Play</string>
+    <string name="hand_response_title">Respond within %1$s</string>
+    <string name="hand_veto">Veto</string>
+    <string name="hand_decoy">Ghost Echo</string>
+    <string name="hand_decoy_title">Pick a decoy point (within 1.5 km)</string>
+    <string name="hand_decoy_none">No stations within 1.5 km of you.</string>
+    <string name="hand_keep_title">Keep %1$d of %2$d drawn cards</string>
+    <string name="hand_keep_confirm">Keep</string>
+    <string name="hand_detour_title">Ban a line for 12:00</string>
+    <string name="hand_service_change_title">Slow a question category by +5:00</string>
+    <string name="hand_relocate_title">Relocate to which station?</string>
+    <string name="hand_lost_and_found_title">Discard up to 3 cards</string>
+
+    <!-- End screen -->
+    <string name="end_title">Round %1$d over</string>
+    <string name="end_summary">Round summary</string>
+    <string name="end_hider_was">Hider: %1$s</string>
+    <string name="end_caught_by">Caught by %1$s at %2$s</string>
+    <string name="end_never_caught">Never caught — +10.0 bonus!</string>
+    <string name="end_round_score">Hider round score: %1$s</string>
+    <string name="end_bonus_minutes">Card bonus: +%1$s min</string>
+    <string name="end_penalty_minutes">Penalty bonus: +%1$s min</string>
+    <string name="end_questions_answered">Questions answered: %1$d</string>
+    <string name="end_cards_played">Cards played: %1$d</string>
+    <string name="end_capture_point">Capture point</string>
+    <string name="end_scores">Match scores</string>
+    <string name="end_personalities">Personality reveal</string>
+    <string name="end_personality_row">%1$s was %2$s</string>
+    <string name="end_next_round">Next round</string>
+    <string name="end_end_match">End match</string>
+
+    <!-- History -->
+    <string name="history_title">History</string>
+    <string name="history_empty">No recorded matches yet.</string>
+    <string name="history_setup">%1$s · %2$s · %3$d round(s)</string>
+    <string name="history_winner">Winner: %1$s</string>
+    <string name="history_round_line">Round %1$d: %2$s scored %3$s — %4$s</string>
+    <string name="history_round_caught">caught by %1$s</string>
+    <string name="history_round_caught_unknown">caught</string>
+    <string name="history_round_survived">survived</string>
+
+    <!-- Foreground service notification -->
+    <string name="notification_channel_name">Game in progress</string>
+    <string name="notification_channel_description">Persistent phase and clock while a GPS game runs.</string>
+    <string name="notification_starting">Starting…</string>
+    <string name="notification_text">%1$s — %2$s</string>
+</resources>
