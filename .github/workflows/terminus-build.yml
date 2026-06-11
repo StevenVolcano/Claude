@@ -28,6 +28,8 @@ jobs:
 
   android-apk:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -45,3 +47,17 @@ jobs:
         with:
           name: terminus-debug-apk
           path: terminus/app/build/outputs/apk/debug/app-debug.apk
+      # Releases (unlike Actions artifacts) are downloadable from the GitHub
+      # mobile app and any phone browser, so keep a rolling prerelease with
+      # the latest APK attached.
+      - name: Publish APK to rolling release
+        if: github.ref == 'refs/heads/claude/jet-lag-android-game-q54kzg'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp terminus/app/build/outputs/apk/debug/app-debug.apk terminus-debug.apk
+          gh release create terminus-latest \
+            --title "TERMINUS — latest debug build" \
+            --notes "Rolling debug build of the TERMINUS APK from the latest push. Download terminus-debug.apk below and sideload it (allow 'install unknown apps')." \
+            --prerelease --target "$GITHUB_SHA" 2>/dev/null || true
+          gh release upload terminus-latest terminus-debug.apk --clobber
