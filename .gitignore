@@ -1,1 +1,6 @@
 .claude/worktrees/
+node_modules/
+dist/
+dev-dist/
+scripts/prepare-data/raw/
+*.log

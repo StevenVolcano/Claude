@@ -5,17 +5,42 @@ This file documents the repository for AI assistants (Claude Code and others) wo
 ## Repository Overview
 
 - **Repo**: `StevenVolcano/Claude` on GitHub
-- **Purpose**: _(describe what this project does)_
-- **Status**: New — no source files yet. This CLAUDE.md is the first commit.
+- **Purpose**: Travel Tracker — a PWA for tracking US states visited, mainline interstates traveled (per-state segments), state capitol buildings visited, and countries visited, all on interactive Leaflet maps. Local-first persistence (localStorage) with JSON export/import for backup (e.g. to Google Drive).
+- **Stack**: Vite + React + TypeScript + Leaflet. Pure static site, no backend. Deployed to GitHub Pages via Actions on push to `main` (site base path is `/Claude/`).
 
 ## Repository Structure
 
 ```
-/                   # root — to be populated
-CLAUDE.md           # this file
+/
+├── CLAUDE.md
+├── index.html / vite.config.ts / tsconfig.json / package.json
+├── .github/workflows/deploy.yml   # GitHub Pages deploy on push to main
+├── public/
+│   ├── icons/                     # PWA icons
+│   └── data/                      # prepared datasets (checked in, regenerable)
+│       ├── us-states.json         # TopoJSON, 50 states, props {key: USPS abbr, name}
+│       ├── world-countries.json   # TopoJSON, props {key: ISO numeric, name}
+│       ├── interstates-by-state.json  # GeoJSON, one feature per (route, state)
+│       ├── interstate-states.json # route -> [state abbrs] checklist
+│       └── capitols.json          # 50 capitol buildings with coords
+├── scripts/prepare-data/          # data pipeline (npm run prepare-data)
+│   ├── base-layers.mjs            # states/countries/capitols from us-atlas, world-atlas, seed CSV
+│   ├── interstates.mjs            # Natural Earth roads -> mainline per-state segments
+│   └── fips.mjs                   # FIPS/abbr/name lookup tables
+└── src/
+    ├── App.tsx                    # tab shell: US Map | World | Lists | Data
+    ├── map/                       # UsMap.tsx, WorldMap.tsx (Leaflet)
+    ├── state/                     # data model, localStorage, export/import
+    ├── components/                # Checklists.tsx, DataPanel.tsx
+    └── data/load.ts               # static data fetching + TopoJSON conversion
 ```
 
-Update this section as directories and files are added.
+## Domain Notes
+
+- Only **mainline** interstates are tracked (1–2 digit routes plus Hawaii H-1..H-3); 3-digit belts/spurs and business loops are excluded in the pipeline. Suffixed branches (I-35E/W) fold into the parent route.
+- Interstate geometry comes from Natural Earth roads (~2012 vintage). Post-2012 mainline routes (I-2, I-11, I-14, I-22, I-41, and extensions of I-49/I-69/I-87/I-99) are patched into the checklist in `scripts/prepare-data/interstates.mjs` but have no map geometry. Two Natural Earth mislabels (I-27 in KY, I-75 in OK) are corrected there too. Prefer regenerating from BTS/FHWA NHPN if that host is reachable.
+- The travel data document is versioned (`schemaVersion: 1`) and validated on import in `src/state/storage.ts`.
+- `npm run prepare-data` regenerates `public/data/`; the interstates script needs the Natural Earth shapefile downloaded to `scripts/prepare-data/raw/` first (URL in its header comment).
 
 ## Branch Conventions
 

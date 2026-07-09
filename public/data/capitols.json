@@ -1,0 +1,402 @@
+[
+ {
+  "state": "AL",
+  "stateName": "Alabama",
+  "city": "Montgomery",
+  "building": "Alabama State Capitol",
+  "lat": 32.377716,
+  "lng": -86.300568
+ },
+ {
+  "state": "AK",
+  "stateName": "Alaska",
+  "city": "Juneau",
+  "building": "Alaska State Capitol",
+  "lat": 58.301598,
+  "lng": -134.420212
+ },
+ {
+  "state": "AZ",
+  "stateName": "Arizona",
+  "city": "Phoenix",
+  "building": "Arizona State Capitol",
+  "lat": 33.448143,
+  "lng": -112.096962
+ },
+ {
+  "state": "AR",
+  "stateName": "Arkansas",
+  "city": "Little Rock",
+  "building": "Arkansas State Capitol",
+  "lat": 34.746613,
+  "lng": -92.288986
+ },
+ {
+  "state": "CA",
+  "stateName": "California",
+  "city": "Sacramento",
+  "building": "California State Capitol",
+  "lat": 38.576668,
+  "lng": -121.493629
+ },
+ {
+  "state": "CO",
+  "stateName": "Colorado",
+  "city": "Denver",
+  "building": "Colorado State Capitol",
+  "lat": 39.739227,
+  "lng": -104.984856
+ },
+ {
+  "state": "CT",
+  "stateName": "Connecticut",
+  "city": "Hartford",
+  "building": "Connecticut State Capitol",
+  "lat": 41.764046,
+  "lng": -72.682198
+ },
+ {
+  "state": "DE",
+  "stateName": "Delaware",
+  "city": "Dover",
+  "building": "Delaware Legislative Hall",
+  "lat": 39.157307,
+  "lng": -75.519722
+ },
+ {
+  "state": "FL",
+  "stateName": "Florida",
+  "city": "Tallahassee",
+  "building": "Florida State Capitol",
+  "lat": 30.438118,
+  "lng": -84.281296
+ },
+ {
+  "state": "GA",
+  "stateName": "Georgia",
+  "city": "Atlanta",
+  "building": "Georgia State Capitol",
+  "lat": 33.749027,
+  "lng": -84.388229
+ },
+ {
+  "state": "HI",
+  "stateName": "Hawaii",
+  "city": "Honolulu",
+  "building": "Hawaii State Capitol",
+  "lat": 21.307442,
+  "lng": -157.857376
+ },
+ {
+  "state": "ID",
+  "stateName": "Idaho",
+  "city": "Boise",
+  "building": "Idaho State Capitol",
+  "lat": 43.617775,
+  "lng": -116.199722
+ },
+ {
+  "state": "IL",
+  "stateName": "Illinois",
+  "city": "Springfield",
+  "building": "Illinois State Capitol",
+  "lat": 39.798363,
+  "lng": -89.654961
+ },
+ {
+  "state": "IN",
+  "stateName": "Indiana",
+  "city": "Indianapolis",
+  "building": "Indiana Statehouse",
+  "lat": 39.768623,
+  "lng": -86.162643
+ },
+ {
+  "state": "IA",
+  "stateName": "Iowa",
+  "city": "Des Moines",
+  "building": "Iowa State Capitol",
+  "lat": 41.591087,
+  "lng": -93.603729
+ },
+ {
+  "state": "KS",
+  "stateName": "Kansas",
+  "city": "Topeka",
+  "building": "Kansas State Capitol",
+  "lat": 39.048191,
+  "lng": -95.677956
+ },
+ {
+  "state": "KY",
+  "stateName": "Kentucky",
+  "city": "Frankfort",
+  "building": "Kentucky State Capitol",
+  "lat": 38.186722,
+  "lng": -84.875374
+ },
+ {
+  "state": "LA",
+  "stateName": "Louisiana",
+  "city": "Baton Rouge",
+  "building": "Louisiana State Capitol",
+  "lat": 30.457069,
+  "lng": -91.187393
+ },
+ {
+  "state": "ME",
+  "stateName": "Maine",
+  "city": "Augusta",
+  "building": "Maine State Capitol",
+  "lat": 44.307167,
+  "lng": -69.781693
+ },
+ {
+  "state": "MD",
+  "stateName": "Maryland",
+  "city": "Annapolis",
+  "building": "Maryland State House",
+  "lat": 38.978764,
+  "lng": -76.490936
+ },
+ {
+  "state": "MA",
+  "stateName": "Massachusetts",
+  "city": "Boston",
+  "building": "Massachusetts State House",
+  "lat": 42.358162,
+  "lng": -71.063698
+ },
+ {
+  "state": "MI",
+  "stateName": "Michigan",
+  "city": "Lansing",
+  "building": "Michigan State Capitol",
+  "lat": 42.733635,
+  "lng": -84.555328
+ },
+ {
+  "state": "MN",
+  "stateName": "Minnesota",
+  "city": "St. Paul",
+  "building": "Minnesota State Capitol",
+  "lat": 44.955097,
+  "lng": -93.102211
+ },
+ {
+  "state": "MS",
+  "stateName": "Mississippi",
+  "city": "Jackson",
+  "building": "Mississippi State Capitol",
+  "lat": 32.303848,
+  "lng": -90.182106
+ },
+ {
+  "state": "MO",
+  "stateName": "Missouri",
+  "city": "Jefferson City",
+  "building": "Missouri State Capitol",
+  "lat": 38.579201,
+  "lng": -92.172935
+ },
+ {
+  "state": "MT",
+  "stateName": "Montana",
+  "city": "Helena",
+  "building": "Montana State Capitol",
+  "lat": 46.585709,
+  "lng": -112.018417
+ },
+ {
+  "state": "NE",
+  "stateName": "Nebraska",
+  "city": "Lincoln",
+  "building": "Nebraska State Capitol",
+  "lat": 40.808075,
+  "lng": -96.699654
+ },
+ {
+  "state": "NV",
+  "stateName": "Nevada",
+  "city": "Carson City",
+  "building": "Nevada State Capitol",
+  "lat": 39.163914,
+  "lng": -119.766121
+ },
+ {
+  "state": "NH",
+  "stateName": "New Hampshire",
+  "city": "Concord",
+  "building": "New Hampshire State House",
+  "lat": 43.206898,
+  "lng": -71.537994
+ },
+ {
+  "state": "NJ",
+  "stateName": "New Jersey",
+  "city": "Trenton",
+  "building": "New Jersey State House",
+  "lat": 40.220596,
+  "lng": -74.769913
+ },
+ {
+  "state": "NM",
+  "stateName": "New Mexico",
+  "city": "Santa Fe",
+  "building": "New Mexico State Capitol",
+  "lat": 35.68224,
+  "lng": -105.939728
+ },
+ {
+  "state": "NY",
+  "stateName": "New York",
+  "city": "Albany",
+  "building": "New York State Capitol",
+  "lat": 42.652843,
+  "lng": -73.757874
+ },
+ {
+  "state": "NC",
+  "stateName": "North Carolina",
+  "city": "Raleigh",
+  "building": "North Carolina State Capitol",
+  "lat": 35.78043,
+  "lng": -78.639099
+ },
+ {
+  "state": "ND",
+  "stateName": "North Dakota",
+  "city": "Bismarck",
+  "building": "North Dakota State Capitol",
+  "lat": 46.82085,
+  "lng": -100.783318
+ },
+ {
+  "state": "OH",
+  "stateName": "Ohio",
+  "city": "Columbus",
+  "building": "Ohio Statehouse",
+  "lat": 39.961346,
+  "lng": -82.999069
+ },
+ {
+  "state": "OK",
+  "stateName": "Oklahoma",
+  "city": "Oklahoma City",
+  "building": "Oklahoma State Capitol",
+  "lat": 35.492207,
+  "lng": -97.503342
+ },
+ {
+  "state": "OR",
+  "stateName": "Oregon",
+  "city": "Salem",
+  "building": "Oregon State Capitol",
+  "lat": 44.938461,
+  "lng": -123.030403
+ },
+ {
+  "state": "PA",
+  "stateName": "Pennsylvania",
+  "city": "Harrisburg",
+  "building": "Pennsylvania State Capitol",
+  "lat": 40.264378,
+  "lng": -76.883598
+ },
+ {
+  "state": "RI",
+  "stateName": "Rhode Island",
+  "city": "Providence",
+  "building": "Rhode Island State House",
+  "lat": 41.830914,
+  "lng": -71.414963
+ },
+ {
+  "state": "SC",
+  "stateName": "South Carolina",
+  "city": "Columbia",
+  "building": "South Carolina State House",
+  "lat": 34.000343,
+  "lng": -81.033211
+ },
+ {
+  "state": "SD",
+  "stateName": "South Dakota",
+  "city": "Pierre",
+  "building": "South Dakota State Capitol",
+  "lat": 44.367031,
+  "lng": -100.346405
+ },
+ {
+  "state": "TN",
+  "stateName": "Tennessee",
+  "city": "Nashville",
+  "building": "Tennessee State Capitol",
+  "lat": 36.16581,
+  "lng": -86.784241
+ },
+ {
+  "state": "TX",
+  "stateName": "Texas",
+  "city": "Austin",
+  "building": "Texas State Capitol",
+  "lat": 30.27467,
+  "lng": -97.740349
+ },
+ {
+  "state": "UT",
+  "stateName": "Utah",
+  "city": "Salt Lake City",
+  "building": "Utah State Capitol",
+  "lat": 40.777477,
+  "lng": -111.888237
+ },
+ {
+  "state": "VT",
+  "stateName": "Vermont",
+  "city": "Montpelier",
+  "building": "Vermont State House",
+  "lat": 44.262436,
+  "lng": -72.580536
+ },
+ {
+  "state": "VA",
+  "stateName": "Virginia",
+  "city": "Richmond",
+  "building": "Virginia State Capitol",
+  "lat": 37.538857,
+  "lng": -77.43364
+ },
+ {
+  "state": "WA",
+  "stateName": "Washington",
+  "city": "Olympia",
+  "building": "Washington State Capitol",
+  "lat": 47.035805,
+  "lng": -122.905014
+ },
+ {
+  "state": "WV",
+  "stateName": "West Virginia",
+  "city": "Charleston",
+  "building": "West Virginia State Capitol",
+  "lat": 38.336246,
+  "lng": -81.612328
+ },
+ {
+  "state": "WI",
+  "stateName": "Wisconsin",
+  "city": "Madison",
+  "building": "Wisconsin State Capitol",
+  "lat": 43.074684,
+  "lng": -89.384445
+ },
+ {
+  "state": "WY",
+  "stateName": "Wyoming",
+  "city": "Cheyenne",
+  "building": "Wyoming State Capitol",
+  "lat": 41.140259,
+  "lng": -104.820236
+ }
+]
