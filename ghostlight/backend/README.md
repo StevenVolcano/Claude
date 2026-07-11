@@ -26,6 +26,28 @@ Then in the dashboard (`/_/`):
    people have signed in (they appear in `users` after first sign-in). The
    in-app admin tab handles this for subsequent members.
 
+## SMS (optional, dormant by default)
+
+Text reminders and sign-in-by-text stay inactive until these environment
+variables are set for the `pocketbase serve` process:
+
+```sh
+GHOSTLIGHT_SMS_PROVIDER=twilio        # or: telnyx
+TWILIO_ACCOUNT_SID=ACxxxxxxxx
+TWILIO_AUTH_TOKEN=xxxxxxxx
+TWILIO_FROM=+18335550123              # your toll-free or 10DLC number
+# telnyx instead: TELNYX_API_KEY=..., TELNYX_FROM=+1...
+```
+
+Prerequisite: US carrier registration on the provider (toll-free number
+verification is the lightest path; A2P 10DLC sole-proprietor works too).
+In the provider console, restrict SMS geo-permissions to US only.
+
+What turns on: phone verification + opt-in on the Home screen, "Text me a
+code" sign-in (verified phones only), and a 10-minute cron that texts
+called members ~24h and ~2h before events (deduped in `reminders_sent`).
+Codes are hashed, expire in 10 minutes, and are rate-limited per phone/IP.
+
 ## Verification checklist (first run)
 
 This schema and the hooks were written against PocketBase v0.30 without a live
@@ -37,6 +59,11 @@ server; on first boot walk this list:
 - [ ] Creating a production auto-creates 4 channels and a join code
 - [ ] Creating an event/announcement sends mirrored email (check SMTP + spam)
 - [ ] API rules: a signed-in non-member cannot list another production's events/messages
+- [ ] Contact sheet shows castmates' names/emails (users view rule + emailVisibility)
+- [ ] With SMS configured: phone verify flow, sign-in by text, and a test event
+      ~1h out produces exactly one "soon" reminder text
+- [ ] Without SMS configured: phone/sign-in-by-text endpoints fail gracefully and
+      the cron does nothing (codes logged, not sent)
 
 ## Backups
 

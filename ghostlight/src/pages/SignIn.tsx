@@ -1,27 +1,49 @@
 import { useState, type FormEvent } from 'react'
 import { pb } from '../lib/pb.ts'
 
-// Passwordless sign-in: email + name -> 6-digit code from email -> done.
+type Method = 'email' | 'phone'
+type Step = 'enter' | 'code'
+
+// Passwordless sign-in, two ways: email a code, or text a code.
+// (Text sign-in only works for phones already verified on an account,
+// and only once the server has an SMS provider configured.)
 export default function SignIn() {
-  const [step, setStep] = useState<'email' | 'code'>('email')
+  const [method, setMethod] = useState<Method>('email')
+  const [step, setStep] = useState<Step>('enter')
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
+  const [phone, setPhone] = useState('')
   const [code, setCode] = useState('')
   const [otpId, setOtpId] = useState('')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+
+  function switchMethod(m: Method) {
+    setMethod(m)
+    setStep('enter')
+    setCode('')
+    setError('')
+  }
 
   async function sendCode(e: FormEvent) {
     e.preventDefault()
     setBusy(true)
     setError('')
     try {
-      await pb.send('/api/ghostlight/signup', { method: 'POST', body: { email, name } })
-      const result = await pb.collection('users').requestOTP(email.trim().toLowerCase())
-      setOtpId(result.otpId)
+      if (method === 'email') {
+        await pb.send('/api/ghostlight/signup', { method: 'POST', body: { email, name } })
+        const result = await pb.collection('users').requestOTP(email.trim().toLowerCase())
+        setOtpId(result.otpId)
+      } else {
+        await pb.send('/api/ghostlight/signin-sms/start', { method: 'POST', body: { phone } })
+      }
       setStep('code')
-    } catch {
-      setError("We couldn't send a code to that address. Check the email and try again.")
+    } catch (err) {
+      setError(
+        err instanceof Error && err.message.length < 120
+          ? err.message
+          : "We couldn't send a code. Check what you entered and try again.",
+      )
     } finally {
       setBusy(false)
     }
@@ -32,9 +54,17 @@ export default function SignIn() {
     setBusy(true)
     setError('')
     try {
-      await pb.collection('users').authWithOTP(otpId, code.trim())
+      if (method === 'email') {
+        await pb.collection('users').authWithOTP(otpId, code.trim())
+      } else {
+        const res = await pb.send('/api/ghostlight/signin-sms/confirm', {
+          method: 'POST',
+          body: { phone, code },
+        })
+        pb.authStore.save(res.token, res.record)
+      }
     } catch {
-      setError("That code didn't match. Check the email (and spam folder) and try again.")
+      setError("That code didn't match. Check the message and try again.")
     } finally {
       setBusy(false)
     }
@@ -49,36 +79,83 @@ export default function SignIn() {
         </div>
         <p className="tagline">Grays Harbor's theater community</p>
 
-        {step === 'email' ? (
+        <div className="chips" role="tablist">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={method === 'email'}
+            className={`chip ${method === 'email' ? 'chip-active' : ''}`}
+            onClick={() => switchMethod('email')}
+          >
+            Email me a code
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={method === 'phone'}
+            className={`chip ${method === 'phone' ? 'chip-active' : ''}`}
+            onClick={() => switchMethod('phone')}
+          >
+            Text me a code
+          </button>
+        </div>
+
+        {step === 'enter' ? (
           <form onSubmit={sendCode}>
-            <label htmlFor="name">Your name</label>
-            <input
-              id="name"
-              type="text"
-              autoComplete="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="As it should appear on the contact sheet"
-              required
-            />
-            <label htmlFor="email">Email</label>
-            <input
-              id="email"
-              type="email"
-              autoComplete="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              required
-            />
+            {method === 'email' ? (
+              <>
+                <label htmlFor="name">Your name</label>
+                <input
+                  id="name"
+                  type="text"
+                  autoComplete="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="As it should appear on the contact sheet"
+                  required
+                />
+                <label htmlFor="email">Email</label>
+                <input
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  required
+                />
+              </>
+            ) : (
+              <>
+                <label htmlFor="phone">Cell phone number</label>
+                <input
+                  id="phone"
+                  type="tel"
+                  autoComplete="tel"
+                  inputMode="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="(360) 555-0123"
+                  required
+                />
+                <p className="hint">
+                  Works once you've added your phone in Ghostlight. New here? Start with email —
+                  it takes a minute.
+                </p>
+              </>
+            )}
             <button type="submit" disabled={busy}>
-              {busy ? 'Sending…' : 'Email me a sign-in code'}
+              {busy ? 'Sending…' : method === 'email' ? 'Email me a sign-in code' : 'Text me a sign-in code'}
             </button>
-            <p className="hint">No password to remember. We email you a 6-digit code instead.</p>
+            {method === 'email' && (
+              <p className="hint">No password to remember. We email you a 6-digit code instead.</p>
+            )}
           </form>
         ) : (
           <form onSubmit={confirmCode}>
-            <label htmlFor="code">Enter the 6-digit code we emailed to {email}</label>
+            <label htmlFor="code">
+              Enter the 6-digit code we {method === 'email' ? `emailed to ${email}` : `texted to ${phone}`}
+            </label>
             <input
               id="code"
               type="text"
@@ -92,8 +169,8 @@ export default function SignIn() {
             <button type="submit" disabled={busy}>
               {busy ? 'Checking…' : 'Sign in'}
             </button>
-            <button type="button" className="link" onClick={() => setStep('email')}>
-              Use a different email
+            <button type="button" className="link" onClick={() => setStep('enter')}>
+              Start over
             </button>
           </form>
         )}

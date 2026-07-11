@@ -28,6 +28,7 @@ routerAdd("POST", "/api/ghostlight/signup", (e) => {
   record.set("email", email);
   record.set("name", data.name.trim());
   record.set("verified", true); // possession of the emailed OTP code proves the address
+  record.set("emailVisibility", true); // castmates need it on the contact sheet
   record.setRandomPassword();
   e.app.save(record);
   return e.json(200, { ok: true, existing: false });

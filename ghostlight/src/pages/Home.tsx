@@ -2,6 +2,7 @@ import { useEffect, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { pb } from '../lib/pb.ts'
 import { useAuth } from '../lib/auth.tsx'
+import PhoneSettings from '../components/PhoneSettings.tsx'
 import type { ProductionRecord } from '../lib/types.ts'
 
 export default function Home() {
@@ -86,6 +87,8 @@ export default function Home() {
         </form>
         {error && <p className="error">{error}</p>}
       </section>
+
+      {user && <PhoneSettings user={user} />}
     </main>
   )
 }
