@@ -45,7 +45,7 @@ In the provider console, restrict SMS geo-permissions to US only.
 
 What turns on: phone verification + opt-in on the Home screen, "Text me a
 code" sign-in (verified phones only), and a 10-minute cron that texts
-called members ~24h and ~2h before events (deduped in `reminders_sent`).
+called members ~10h and ~2h before events (deduped in `reminders_sent`).
 Codes are hashed, expire in 10 minutes, and are rate-limited per phone/IP.
 
 ## Verification checklist (first run)
@@ -61,9 +61,12 @@ server; on first boot walk this list:
 - [ ] API rules: a signed-in non-member cannot list another production's events/messages
 - [ ] Contact sheet shows castmates' names/emails (users view rule + emailVisibility)
 - [ ] With SMS configured: phone verify flow, sign-in by text, and a test event
-      ~1h out produces exactly one "soon" reminder text
+      ~1h out produces exactly one "2h" reminder text
 - [ ] Without SMS configured: phone/sign-in-by-text endpoints fail gracefully and
       the cron does nothing (codes logged, not sent)
+- [ ] Calendar: "Get my calendar link" returns a URL (requires Settings → Application
+      → Application URL to be set), the .ics validates, and subscribing in Google
+      Calendar / Apple Calendar shows called events
 
 ## Backups
 

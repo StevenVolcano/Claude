@@ -247,15 +247,16 @@ onRecordUpdateRequest((e) => {
 }, "users");
 
 // --- reminder cron --------------------------------------------------------------
-// Every 10 minutes: text people called for events ~24h out (kind day_before)
-// and ~2h out (kind soon). reminders_sent dedupes across runs.
+// Every 10 minutes: text people called for events ~10h out and ~2h out.
+// reminders_sent dedupes across runs. Windows are 2h+ wide so a 10-minute
+// cron can't skip past one.
 
 cronAdd("ghostlight_sms_reminders", "*/10 * * * *", () => {
   if (!smsConfigured()) return;
 
   const windows = [
-    { kind: "day_before", fromMs: 20 * 3600e3, toMs: 24 * 3600e3, word: "tomorrow" },
-    { kind: "soon", fromMs: 0, toMs: 2.5 * 3600e3, word: "soon" },
+    { kind: "10h", fromMs: 8 * 3600e3, toMs: 10 * 3600e3, word: "today" },
+    { kind: "2h", fromMs: 0, toMs: 2.5 * 3600e3, word: "soon" },
   ];
 
   for (const w of windows) {

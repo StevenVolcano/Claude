@@ -3,6 +3,7 @@ import { pb } from '../lib/pb.ts'
 import { useAuth } from '../lib/auth.tsx'
 import { useProduction } from './Production.tsx'
 import { formatDay, formatWhen, pbDate } from '../lib/types.ts'
+import { downloadEventIcs, googleCalendarUrl } from '../lib/calendar.ts'
 import type { AckRecord, ConflictRecord, EventRecord } from '../lib/types.ts'
 
 export default function ScheduleTab() {
@@ -83,6 +84,19 @@ export default function ScheduleTab() {
                   ) : (
                     <button onClick={() => gotIt(e)}>Got it 👍</button>
                   ))}
+                <div className="row cal-links">
+                  <a
+                    className="link"
+                    href={googleCalendarUrl(e, production.title)}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    + Google Calendar
+                  </a>
+                  <button className="link" onClick={() => downloadEventIcs(e, production.title)}>
+                    + Apple / other calendar
+                  </button>
+                </div>
                 {isManager && (
                   <div className="hint">
                     {ackCount} {ackCount === 1 ? 'person has' : 'people have'} tapped “Got it”
@@ -98,7 +112,57 @@ export default function ScheduleTab() {
       </section>
 
       <ConflictsSection conflicts={conflicts} reload={load} />
+      <CalendarSubscribeSection />
     </div>
+  )
+}
+
+function CalendarSubscribeSection() {
+  const [url, setUrl] = useState('')
+  const [copied, setCopied] = useState(false)
+  const [busy, setBusy] = useState(false)
+
+  async function getUrl() {
+    setBusy(true)
+    try {
+      const res = await pb.send('/api/ghostlight/calendar-url', { method: 'GET' })
+      setUrl(res.url)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  async function copy() {
+    await navigator.clipboard.writeText(url)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  return (
+    <section>
+      <h2>Put your calls on your own calendar</h2>
+      <p className="hint">
+        Subscribe once and every event you're called for shows up in Google Calendar, Apple
+        Calendar, or your phone's calendar — and stays up to date when the schedule changes.
+      </p>
+      {!url ? (
+        <button onClick={getUrl} disabled={busy}>
+          {busy ? 'One moment…' : 'Get my calendar link'}
+        </button>
+      ) : (
+        <div className="stack">
+          <div className="row">
+            <input aria-label="Calendar link" readOnly value={url} onFocus={(e) => e.target.select()} />
+            <button onClick={copy}>{copied ? 'Copied ✓' : 'Copy'}</button>
+          </div>
+          <p className="hint">
+            <strong>Google Calendar:</strong> Other calendars → + → From URL → paste.{' '}
+            <strong>iPhone:</strong> Settings → Calendar → Accounts → Add Account → Other → Add
+            Subscribed Calendar → paste. Keep this link to yourself — it's your personal schedule.
+          </p>
+        </div>
+      )}
+    </section>
   )
 }
 

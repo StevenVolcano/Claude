@@ -206,6 +206,15 @@ form.stack,
   margin-top: 0.4rem;
 }
 
+.cal-links {
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.cal-links .link {
+  font-size: 0.9rem;
+}
+
 .hint {
   color: var(--muted);
   font-size: 0.92rem;

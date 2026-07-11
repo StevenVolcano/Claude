@@ -22,8 +22,11 @@ The full product plan lives in [`../planning/ghostlight.md`](../planning/ghostli
   called, so people who never open the app still get the schedule
 - **Text reminders & sign-in by text** (dormant until an SMS provider is
   configured — see `backend/README.md`): verified phones get reminder texts
-  the day before and ~2 hours before their calls, and can sign in with a
-  texted code instead of email
+  10 hours and ~2 hours before their calls, and can sign in with a texted
+  code instead of email
+- **Calendar integration** — add any event to Google/Apple/phone calendars
+  with one tap, or subscribe to a personal auto-updating feed of everything
+  you're called for
 - **PWA** — installable on Android/iOS/desktop, offline app shell
 
 ## Architecture

@@ -81,8 +81,8 @@ export default function PhoneSettings({ user }: { user: UserRecord }) {
       <h2>Text reminders</h2>
       <div className="card stack">
         <p className="hint">
-          Add your cell number and Ghostlight will text you before your calls — the day before,
-          and again a couple hours out. Email reminders happen either way.
+          Add your cell number and Ghostlight will text you before your calls — 10 hours ahead,
+          and again about 2 hours out. Email reminders happen either way.
         </p>
         {step === 'phone' ? (
           <form onSubmit={start} className="row">

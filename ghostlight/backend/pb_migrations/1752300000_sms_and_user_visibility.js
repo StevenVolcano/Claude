@@ -49,7 +49,7 @@ migrate(
       fields: [
         { type: "relation", name: "event", collectionId: events.id, required: true, maxSelect: 1, cascadeDelete: true },
         { type: "relation", name: "user", collectionId: users.id, required: true, maxSelect: 1, cascadeDelete: true },
-        { type: "select", name: "kind", values: ["day_before", "soon"], required: true, maxSelect: 1 },
+        { type: "select", name: "kind", values: ["10h", "2h"], required: true, maxSelect: 1 },
         { type: "autodate", name: "created", onCreate: true },
       ],
       indexes: [
