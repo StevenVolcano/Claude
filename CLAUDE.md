@@ -13,8 +13,8 @@ This file documents the repository for AI assistants (Claude Code and others) wo
 ```
 /
 ├── CLAUDE.md
-├── planning/ghostlight.md         # product plan for Ghostlight (separate project)
-├── ghostlight/                    # Ghostlight: community-theater app (Vite/React PWA +
+├── planning/glowtape.md         # product plan for Glow Tape (separate project)
+├── glowtape/                    # Glow Tape: community-theater app (Vite/React PWA +
 │                                  # PocketBase backend); self-contained, own package.json;
 │                                  # intended to move to its own repo eventually
 ├── index.html / vite.config.ts / tsconfig.json / package.json

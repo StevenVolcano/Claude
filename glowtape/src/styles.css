@@ -1,0 +1,440 @@
+/* Glow Tape — designed for every age backstage: big type, big targets,
+   high contrast, no mystery icons. */
+
+:root {
+  --ink: #241f2e;
+  --paper: #faf8f4;
+  --card: #ffffff;
+  --lamp: #cdef55; /* glow-tape green */
+  --lamp-dark: #a3c437;
+  --accent: #4a3f66;
+  --muted: #6b6478;
+  --line: #ddd8ce;
+  --ok: #2e7d4f;
+  --error: #b3372f;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 17px;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+h1 {
+  font-size: 1.6rem;
+  margin: 0.5rem 0;
+}
+
+h2 {
+  font-size: 1.2rem;
+  margin: 1.5rem 0 0.5rem;
+}
+
+.page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0.75rem 1rem 4rem;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+
+.brand-small {
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* --- Buttons and inputs: minimum 44px targets --- */
+button {
+  font: inherit;
+  font-weight: 600;
+  background: var(--lamp);
+  color: #1c2405;
+  border: none;
+  border-radius: 10px;
+  padding: 0.65rem 1.1rem;
+  min-height: 44px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--lamp-dark);
+  color: #16181f;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+button.link {
+  background: none;
+  border: none;
+  color: var(--accent);
+  text-decoration: underline;
+  font-weight: 500;
+  padding: 0.4rem;
+  min-height: 0;
+}
+
+input,
+select,
+textarea {
+  font: inherit;
+  padding: 0.6rem 0.75rem;
+  min-height: 44px;
+  border: 2px solid var(--line);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--ink);
+  width: 100%;
+}
+
+textarea {
+  resize: vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus-visible {
+  outline: 3px solid var(--lamp);
+  outline-offset: 1px;
+}
+
+label {
+  font-weight: 600;
+  display: block;
+}
+
+form.stack,
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: end;
+  flex-wrap: wrap;
+}
+
+.row > label {
+  flex: 1;
+}
+
+.space-between {
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* --- Cards --- */
+.cards {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+  display: block;
+}
+
+.card-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: inherit;
+  text-decoration: none;
+  font-size: 1.1rem;
+}
+
+.card-link:hover {
+  border-color: var(--lamp);
+}
+
+.pill {
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.8rem;
+  border-radius: 999px;
+  padding: 0.15rem 0.7rem;
+}
+
+.event.not-called {
+  opacity: 0.65;
+}
+
+.event-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-size: 1.05rem;
+}
+
+.event-line {
+  margin-top: 0.3rem;
+}
+
+.acked {
+  color: var(--ok);
+  font-weight: 700;
+  margin-top: 0.4rem;
+}
+
+.cal-links {
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.cal-links .link {
+  font-size: 0.9rem;
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.error {
+  color: var(--error);
+  font-weight: 600;
+}
+
+/* --- Tabs --- */
+.tabs {
+  display: flex;
+  gap: 0.25rem;
+  border-bottom: 2px solid var(--line);
+  margin: 0.75rem 0 1rem;
+  overflow-x: auto;
+}
+
+.tabs a {
+  padding: 0.6rem 0.9rem;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 600;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap;
+}
+
+.tabs a.active {
+  color: var(--ink);
+  border-bottom-color: var(--lamp);
+}
+
+/* --- Chips --- */
+.chips {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.chip {
+  background: var(--card);
+  border: 2px solid var(--line);
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.chip-active {
+  border-color: var(--lamp);
+  background: #f4fadd;
+  font-weight: 700;
+}
+
+/* --- Messages --- */
+.channel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.messages {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.75rem;
+  max-height: 50vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.msg {
+  display: flex;
+  flex-direction: column;
+}
+
+.msg-author {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.msg-text {
+  background: var(--paper);
+  border-radius: 10px;
+  padding: 0.4rem 0.7rem;
+  align-self: flex-start;
+  max-width: 85%;
+  white-space: pre-wrap;
+}
+
+.msg.mine .msg-text {
+  background: #f4fadd;
+  align-self: flex-end;
+}
+
+.msg.mine .msg-author {
+  align-self: flex-end;
+}
+
+/* --- Lists / members --- */
+.plain-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.member-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.member-row strong {
+  min-width: 10rem;
+}
+
+.member-row select,
+.member-row input {
+  width: auto;
+  flex: 1;
+  min-width: 9rem;
+}
+
+/* --- Contact sheet --- */
+.contact-sheet {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card);
+}
+
+.contact-sheet th,
+.contact-sheet td {
+  text-align: left;
+  padding: 0.5rem 0.6rem;
+  border-bottom: 1px solid var(--line);
+  word-break: break-word;
+}
+
+/* --- Join code --- */
+.join-code {
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: 0.35em;
+  text-align: center;
+  background: var(--card);
+  border: 3px dashed var(--lamp);
+  border-radius: 12px;
+  padding: 1rem;
+  user-select: all;
+}
+
+/* --- Sign-in --- */
+.signin {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #16181f;
+  padding: 1rem;
+}
+
+.signin-card {
+  background: var(--paper);
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.signin-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.brand h1 {
+  margin: 0;
+}
+
+.brand-lamp {
+  border-radius: 10px;
+}
+
+.tagline {
+  color: var(--muted);
+  margin: 0 0 0.5rem;
+}
+
+/* --- Print: the contact sheet should look like paper was always the plan --- */
+@media print {
+  .topbar,
+  .tabs,
+  .no-print,
+  button {
+    display: none !important;
+  }
+
+  body {
+    background: #fff;
+  }
+
+  .page {
+    max-width: none;
+    padding: 0;
+  }
+}

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#16181f"/>
+  <g transform="rotate(-35 256 256)">
+    <!-- glow halo -->
+    <rect x="46" y="166" width="420" height="180" rx="90" fill="#cdef55" opacity="0.08"/>
+    <rect x="56" y="196" width="400" height="120" rx="60" fill="#cdef55" opacity="0.16"/>
+    <!-- tape -->
+    <rect x="66" y="222" width="380" height="68" rx="6" fill="#cdef55"/>
+    <rect x="66" y="238" width="380" height="36" rx="4" fill="#e8ff8a"/>
+  </g>
+</svg>
