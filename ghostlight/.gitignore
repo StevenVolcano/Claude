@@ -1,0 +1,7 @@
+node_modules/
+dist/
+backend/pocketbase
+backend/pocketbase.zip
+backend/pb_data/
+backend/pb_public/
+*.tsbuildinfo

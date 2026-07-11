@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#1a1423"/>
+  <!-- glow -->
+  <circle cx="256" cy="168" r="120" fill="#e8a33d" opacity="0.15"/>
+  <circle cx="256" cy="168" r="80" fill="#e8a33d" opacity="0.25"/>
+  <!-- bulb -->
+  <circle cx="256" cy="168" r="44" fill="#f6c76b"/>
+  <circle cx="256" cy="168" r="44" fill="none" stroke="#e8a33d" stroke-width="6"/>
+  <!-- cage -->
+  <path d="M220 200 q36 26 72 0" stroke="#8f86a8" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <!-- pole -->
+  <rect x="248" y="212" width="16" height="180" rx="8" fill="#8f86a8"/>
+  <!-- base -->
+  <rect x="176" y="392" width="160" height="20" rx="10" fill="#8f86a8"/>
+  <rect x="208" y="374" width="96" height="20" rx="10" fill="#8f86a8"/>
+</svg>
